@@ -10,6 +10,7 @@ import pandas as pd
 from pathlib import Path
 import yaml
 
+# pyrefly: ignore [missing-import]
 from src.canonical_schemas import validate_dataframe
 
 _PACKAGE_ROOT = Path(__file__).resolve().parent.parent
