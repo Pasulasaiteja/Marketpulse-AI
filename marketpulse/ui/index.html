@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MarketPulse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1 class="brand" data-i18n="app_title">MarketPulse</h1>
+    <label class="lang">
+      <span data-i18n="language">Language</span>
+      <select id="lang" aria-label="Language"></select>
+    </label>
+  </header>
+
+  <ol class="steps" id="steps" aria-label="Progress">
+    <li data-step="describe"><span data-i18n="step_describe">Describe</span></li>
+    <li data-step="confirm"><span data-i18n="step_confirm">Confirm</span></li>
+    <li data-step="plan"><span data-i18n="step_plan">Plan</span></li>
+  </ol>
+
+  <div id="alerts" class="alerts" role="alert" aria-live="assertive"></div>
+
+  <main>
+    <!-- 1. describe -->
+    <section id="screen-describe" data-screen="describe" aria-labelledby="h-describe">
+      <h2 id="h-describe" tabindex="-1" data-i18n="describe_title">Tell us about your shop</h2>
+      <p class="hint" data-i18n="describe_hint"></p>
+
+      <form id="form-describe" novalidate>
+        <div class="field">
+          <label for="description" data-i18n="description_label">Shop description</label>
+          <textarea id="description" rows="4" data-i18n-ph="description_ph"></textarea>
+          <button type="button" class="link" id="btn-example" data-i18n="try_example">Use an example</button>
+        </div>
+
+        <fieldset class="field">
+          <legend data-i18n="data_title">Your sales data</legend>
+          <label class="file">
+            <span data-i18n="products_csv">Products file (CSV)</span>
+            <input type="file" id="file-products" accept=".csv,text/csv">
+          </label>
+          <label class="file">
+            <span data-i18n="sales_csv">Sales file (CSV)</span>
+            <input type="file" id="file-sales" accept=".csv,text/csv">
+          </label>
+          <button type="button" class="link" id="btn-demo" data-i18n="use_demo">Use sample shop data</button>
+          <button type="button" class="link" id="btn-demo-chain" data-i18n="use_demo_chain">Use sample data for 3 stores</button>
+          <p class="status" id="data-status" aria-live="polite"></p>
+        </fieldset>
+
+        <div class="row">
+          <div class="field grow">
+            <label for="budget" data-i18n="budget_label">Budget</label>
+            <input id="budget" type="number" inputmode="decimal" min="1" step="any" value="5000">
+          </div>
+          <div class="field">
+            <label for="horizon" data-i18n="horizon_label">Plan for</label>
+            <select id="horizon">
+              <option value="7">7</option>
+              <option value="14" selected>14</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="primary" id="btn-extract" data-i18n="read_details">Read my shop details</button>
+      </form>
+    </section>
+
+    <!-- 2. confirm -->
+    <section id="screen-confirm" data-screen="confirm" hidden aria-labelledby="h-confirm">
+      <h2 id="h-confirm" tabindex="-1" data-i18n="confirm_title">Check what we understood</h2>
+      <p class="hint" data-i18n="confirm_hint"></p>
+      <form id="form-confirm" novalidate>
+        <div id="confirm-fields"></div>
+        <div class="actions">
+          <button type="button" class="secondary" id="btn-back" data-i18n="back">Back</button>
+          <button type="submit" class="primary" id="btn-confirm" data-i18n="confirm_btn">Confirm and make plan</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 3. plan -->
+    <section id="screen-plan" data-screen="plan" hidden aria-labelledby="h-plan">
+      <h2 id="h-plan" tabindex="-1" data-i18n="plan_title">Your purchase plan</h2>
+
+      <label class="store" id="store-box" hidden>
+        <span data-i18n="store_label">Store</span>
+        <select id="store-select"></select>
+      </label>
+
+      <div class="budget" id="budget-box">
+        <div class="tape-labels">
+          <span class="muted" data-i18n="spend_label">Planned spend</span>
+          <span class="spend"><span id="spend-val" class="num"></span> <span id="cur-a" class="cur"></span></span>
+        </div>
+        <div class="tape" id="tape" role="img" aria-label="">
+          <div class="tape-fill" id="tape-fill"></div>
+        </div>
+        <div class="tape-labels">
+          <span class="muted" data-i18n="of_budget">of budget</span>
+          <span><span id="budget-val" class="num"></span> <span id="cur-b" class="cur"></span></span>
+        </div>
+        <label class="slider" for="budget-range">
+          <span data-i18n="slider_label">Change your budget</span>
+          <input id="budget-range" type="range" min="0" max="10000" step="100">
+        </label>
+        <input id="budget-num" class="budget-num" type="number" inputmode="decimal" min="1" step="any"
+               aria-label="Budget">
+        <p class="status" id="plan-status" aria-live="polite"></p>
+      </div>
+
+      <div class="profit">
+        <span class="muted" data-i18n="profit_label">Expected profit</span>
+        <span class="profit-val"><span id="profit-val" class="num"></span> <span id="cur-c" class="cur"></span></span>
+        <span class="muted small" data-i18n="profit_note"></span>
+      </div>
+
+      <div id="plan-flags"></div>
+
+      <h3 data-i18n="why_title">Why this plan</h3>
+      <p id="explanation" class="explanation"></p>
+
+      <h3 data-i18n="buy_title">Buy now</h3>
+      <ul id="buy-list" class="lines"></ul>
+
+      <h3 id="skip-title" data-i18n="skip_title">Not buying now</h3>
+      <ul id="skip-list" class="lines skip"></ul>
+
+      <h3 data-i18n="risks_title">What could go wrong</h3>
+      <ul id="risk-list" class="risks"></ul>
+
+      <h3 data-i18n="sens_title">If your budget were different</h3>
+      <table class="sens" id="sens-table">
+        <thead><tr>
+          <th scope="col" data-i18n="sens_budget">Budget</th>
+          <th scope="col" data-i18n="sens_spend">Spend</th>
+          <th scope="col" data-i18n="sens_profit">Profit</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <h3 data-i18n="chat_title">Ask why</h3>
+      <ul id="chat-log" class="chat" aria-live="polite"></ul>
+      <div class="suggest" id="suggest"></div>
+      <form id="form-chat" class="chat-form" novalidate>
+        <input id="chat-input" type="text" autocomplete="off" aria-label="Question" data-i18n-ph="chat_ph">
+        <button type="submit" class="primary" id="btn-ask" data-i18n="ask_btn">Ask</button>
+      </form>
+
+      <h3 data-i18n="explore_section_title">New products to try</h3>
+      <p class="hint" data-i18n="explore_section_hint"></p>
+      <button type="button" class="secondary full" id="btn-explore" data-i18n="explore_btn">Find new products to try</button>
+
+      <p class="timing muted small" id="timing"></p>
+      <button type="button" class="secondary full" id="btn-edit" data-i18n="edit_description">Edit shop description</button>
+    </section>
+
+    <!-- 4. explore (Component D) -->
+    <section id="screen-explore" data-screen="explore" hidden aria-labelledby="h-explore">
+      <h2 id="h-explore" tabindex="-1" data-i18n="explore_title">New products to try</h2>
+      <p class="hint" data-i18n="explore_hint"></p>
+      <p class="flag" id="explore-sample" hidden data-i18n="explore_sample_note"></p>
+      <div id="explore-flags"></div>
+      <p class="status" id="explore-status" aria-live="polite"></p>
+      <div id="explore-body"></div>
+      <button type="button" class="secondary full" id="btn-explore-back" data-i18n="back_to_plan">Back to plan</button>
+    </section>
+  </main>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,590 @@
+{
+  "$defs": {
+    "FieldEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "new_value": {
+          "default": null,
+          "title": "New Value"
+        },
+        "old_value": {
+          "default": null,
+          "title": "Old Value"
+        }
+      },
+      "required": [
+        "field"
+      ],
+      "title": "FieldEdit",
+      "type": "object"
+    },
+    "FollowUpQuestion": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "question": {
+          "description": "Short question written in the retailer's language.",
+          "title": "Question",
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "missing",
+            "low_confidence",
+            "conflict"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "question",
+        "reason"
+      ],
+      "title": "FollowUpQuestion",
+      "type": "object"
+    },
+    "ProfileField_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1___Le_le_31_____": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "maximum": 31,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Ge(ge=1), Le(le=31)])]]",
+      "type": "object"
+    },
+    "ProfileField_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__2________": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{2}$')])]]",
+      "type": "object"
+    },
+    "ProfileField_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Annotated[str, FieldInfo(annotation=NoneType, required=True, metadata=[_PydanticGeneralMetadata(pattern='^[A-Z]{3}$')])]]",
+      "type": "object"
+    },
+    "ProfileField_Literal__grocery____pharmacy____general_store____clothing____electronics____hardware____other___": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "grocery",
+                "pharmacy",
+                "general_store",
+                "clothing",
+                "electronics",
+                "hardware",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Literal['grocery', 'pharmacy', 'general_store', 'clothing', 'electronics', 'hardware', 'other']]",
+      "type": "object"
+    },
+    "ProfileField_Literal__low____lower_middle____middle____upper____unknown___": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "lower_middle",
+                "middle",
+                "upper",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Literal['low', 'lower_middle', 'middle', 'upper', 'unknown']]",
+      "type": "object"
+    },
+    "ProfileField_Literal__urban_dense____urban____peri_urban____rural____unknown___": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "urban_dense",
+                "urban",
+                "peri_urban",
+                "rural",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[Literal['urban_dense', 'urban', 'peri_urban', 'rural', 'unknown']]",
+      "type": "object"
+    },
+    "ProfileField_list_Literal__school____market____transport_hub____place_of_worship____hospital____university____office_district____factory____other____": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "school",
+                  "market",
+                  "transport_hub",
+                  "place_of_worship",
+                  "hospital",
+                  "university",
+                  "office_district",
+                  "factory",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[list[Literal['school', 'market', 'transport_hub', 'place_of_worship', 'hospital', 'university', 'office_district', 'factory', 'other']]]",
+      "type": "object"
+    },
+    "ProfileField_str_": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Span of the original description supporting the value.",
+          "title": "Evidence"
+        },
+        "source": {
+          "default": "llm",
+          "enum": [
+            "llm",
+            "retailer",
+            "default"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "ProfileField[str]",
+      "type": "object"
+    },
+    "ProfileFields": {
+      "additionalProperties": false,
+      "properties": {
+        "country": {
+          "$ref": "#/$defs/ProfileField_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__2________",
+          "description": "ISO 3166-1 alpha-2"
+        },
+        "currency": {
+          "$ref": "#/$defs/ProfileField_Annotated_str__FieldInfo_annotation_NoneType__required_True__metadata___PydanticGeneralMetadata_pattern____A-Z__3________",
+          "description": "ISO 4217"
+        },
+        "income_band": {
+          "$ref": "#/$defs/ProfileField_Literal__low____lower_middle____middle____upper____unknown___"
+        },
+        "location_type": {
+          "$ref": "#/$defs/ProfileField_Literal__urban_dense____urban____peri_urban____rural____unknown___"
+        },
+        "nearby_anchors": {
+          "$ref": "#/$defs/ProfileField_list_Literal__school____market____transport_hub____place_of_worship____hospital____university____office_district____factory____other____"
+        },
+        "payday_day": {
+          "$ref": "#/$defs/ProfileField_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Ge_ge_1___Le_le_31_____",
+          "description": "Day of month wages are typically paid. 'End of the month' normalizes to 28."
+        },
+        "place_name": {
+          "$ref": "#/$defs/ProfileField_str_"
+        },
+        "shop_category": {
+          "$ref": "#/$defs/ProfileField_Literal__grocery____pharmacy____general_store____clothing____electronics____hardware____other___"
+        }
+      },
+      "required": [
+        "location_type",
+        "income_band",
+        "payday_day",
+        "nearby_anchors",
+        "shop_category",
+        "place_name",
+        "country",
+        "currency"
+      ],
+      "title": "ProfileFields",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "edits": {
+      "items": {
+        "$ref": "#/$defs/FieldEdit"
+      },
+      "title": "Edits",
+      "type": "array"
+    },
+    "fields": {
+      "$ref": "#/$defs/ProfileFields"
+    },
+    "follow_up_questions": {
+      "items": {
+        "$ref": "#/$defs/FollowUpQuestion"
+      },
+      "title": "Follow Up Questions",
+      "type": "array"
+    },
+    "language": {
+      "description": "Detected language of the description.",
+      "pattern": "^[a-z]{2}$",
+      "title": "Language",
+      "type": "string"
+    },
+    "profile_id": {
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "raw_description": {
+      "title": "Raw Description",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "default": "extracted",
+      "enum": [
+        "extracted",
+        "confirmed"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "profile_id",
+    "language",
+    "raw_description",
+    "fields"
+  ],
+  "title": "ExtractionProfile",
+  "type": "object"
+}

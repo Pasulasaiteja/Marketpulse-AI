@@ -1,0 +1,66 @@
+{
+  "$defs": {
+    "CitedFigure": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "JSON Pointer into the OptimizerPlan, e.g. /lines/0/order_qty",
+          "title": "Path",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "path",
+        "value"
+      ],
+      "title": "CitedFigure",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cited_figures": {
+      "description": "Every number appearing in text must be listed here and match the plan.",
+      "items": {
+        "$ref": "#/$defs/CitedFigure"
+      },
+      "title": "Cited Figures",
+      "type": "array"
+    },
+    "language": {
+      "pattern": "^[a-z]{2}$",
+      "title": "Language",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "language",
+    "text"
+  ],
+  "title": "Explanation",
+  "type": "object"
+}

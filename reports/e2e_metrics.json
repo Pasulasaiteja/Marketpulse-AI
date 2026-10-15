@@ -1,0 +1,45 @@
+{
+  "generated": "2026-10-15",
+  "modules": "mocks (default_modules)",
+  "horizon_days": 14,
+  "budget": 5000.0,
+  "pipeline": {
+    "plans_run": 8,
+    "plans_ok": 8,
+    "within_budget": 8,
+    "explanation_present": 8,
+    "stores_with_identical_plan_across_languages": 2,
+    "stores": 2,
+    "cross_language_note": "mock extractor only; real extractor not tested",
+    "warnings_seen": [
+      "CURRENCY_MISMATCH"
+    ],
+    "latency_note": "mocks answer in milliseconds; these numbers say nothing about real modules",
+    "latency_cold_s": {
+      "median": 11.753,
+      "max": 13.713,
+      "target": 10.0
+    },
+    "latency_warm_s": {
+      "median": 1.189,
+      "max": 1.345,
+      "target": 3.0
+    }
+  },
+  "backtest": {
+    "forecasts_scored": 480,
+    "mae_units": 43.28,
+    "naive_last_period_mae_units": 51.65,
+    "wape": 0.1444,
+    "interval_90_coverage": 0.9958,
+    "interval_90_target": 0.9,
+    "scope": "MOCK forecaster: validates the harness, not Member 2's model"
+  },
+  "stockout_bias": {
+    "share_of_days_flagged_stockout": 0.0989,
+    "mean_daily_units_including_zero_days": 20.608,
+    "mean_daily_units_excluding_flagged_days": 22.87,
+    "underestimate_if_zeros_treated_as_demand": 0.0989,
+    "note": "their rule flags every zero-sales day as a stockout, so this is an upper-bound check of the bias they must censor, not a measured stockout rate"
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "Product": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "current_stock": {
+          "default": 0,
+          "minimum": 0.0,
+          "title": "Current Stock",
+          "type": "number"
+        },
+        "lead_time_days": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Lead Time Days",
+          "type": "integer"
+        },
+        "min_order_qty": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Min Order Qty",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "on_order": {
+          "default": 0,
+          "minimum": 0.0,
+          "title": "On Order",
+          "type": "number"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "shelf_life_days": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shelf Life Days"
+        },
+        "storage_units": {
+          "default": 1.0,
+          "description": "Storage space per unit.",
+          "minimum": 0.0,
+          "title": "Storage Units",
+          "type": "number"
+        },
+        "unit_cost": {
+          "description": "Purchase price per unit.",
+          "minimum": 0.0,
+          "title": "Unit Cost",
+          "type": "number"
+        },
+        "unit_price": {
+          "description": "Selling price per unit.",
+          "minimum": 0.0,
+          "title": "Unit Price",
+          "type": "number"
+        }
+      },
+      "required": [
+        "product_id",
+        "name",
+        "unit_cost",
+        "unit_price"
+      ],
+      "title": "Product",
+      "type": "object"
+    },
+    "SalesRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "revenue": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revenue"
+        },
+        "stockout": {
+          "default": false,
+          "description": "True if the product ran out that day (demand is censored).",
+          "title": "Stockout",
+          "type": "boolean"
+        },
+        "units_sold": {
+          "minimum": 0.0,
+          "title": "Units Sold",
+          "type": "number"
+        }
+      },
+      "required": [
+        "date",
+        "product_id",
+        "units_sold"
+      ],
+      "title": "SalesRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "description": "Last day of data. No record may be later.",
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "currency": {
+      "pattern": "^[A-Z]{3}$",
+      "title": "Currency",
+      "type": "string"
+    },
+    "products": {
+      "items": {
+        "$ref": "#/$defs/Product"
+      },
+      "title": "Products",
+      "type": "array"
+    },
+    "sales": {
+      "items": {
+        "$ref": "#/$defs/SalesRecord"
+      },
+      "title": "Sales",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shop_id": {
+      "title": "Shop Id",
+      "type": "string"
+    },
+    "storage_capacity_units": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Storage Capacity Units"
+    }
+  },
+  "required": [
+    "shop_id",
+    "currency",
+    "as_of",
+    "products",
+    "sales"
+  ],
+  "title": "CanonicalData",
+  "type": "object"
+}

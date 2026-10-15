@@ -1,0 +1,464 @@
+{
+  "$defs": {
+    "Comparable": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "observed_units_per_horizon": {
+          "minimum": 0.0,
+          "title": "Observed Units Per Horizon",
+          "type": "number"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "similarity": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Similarity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "product_id",
+        "name",
+        "similarity",
+        "observed_units_per_horizon"
+      ],
+      "title": "Comparable",
+      "type": "object"
+    },
+    "DemandRange": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "minimum": 0.0,
+          "title": "High",
+          "type": "number"
+        },
+        "horizon_days": {
+          "title": "Horizon Days",
+          "type": "integer"
+        },
+        "low": {
+          "minimum": 0.0,
+          "title": "Low",
+          "type": "number"
+        },
+        "mid": {
+          "minimum": 0.0,
+          "title": "Mid",
+          "type": "number"
+        },
+        "unit": {
+          "const": "units_per_horizon",
+          "default": "units_per_horizon",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "low",
+        "mid",
+        "high",
+        "horizon_days"
+      ],
+      "title": "DemandRange",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Date"
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "ExcludedCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "ALREADY_STOCKED",
+            "SUPPLIER_UNAVAILABLE",
+            "NO_COMPARABLES",
+            "COMPARABLES_NO_SALES"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "name",
+        "reason"
+      ],
+      "title": "ExcludedCandidate",
+      "type": "object"
+    },
+    "Opportunity": {
+      "additionalProperties": false,
+      "properties": {
+        "basis_description": {
+          "description": "English summary of how the range was obtained.",
+          "title": "Basis Description",
+          "type": "string"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "comparables": {
+          "items": {
+            "$ref": "#/$defs/Comparable"
+          },
+          "title": "Comparables",
+          "type": "array"
+        },
+        "demand": {
+          "$ref": "#/$defs/DemandRange"
+        },
+        "demand_basis": {
+          "enum": [
+            "observed",
+            "hypothesized"
+          ],
+          "title": "Demand Basis",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "is_forecast": {
+          "const": false,
+          "default": false,
+          "description": "Always false: opportunities are never forecasts.",
+          "title": "Is Forecast",
+          "type": "boolean"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "enum": [
+              "COMPETITION_UNKNOWN",
+              "FEW_COMPARABLES",
+              "SIGNALS_NOT_VALIDATED",
+              "LOW_REQUEST_COUNT",
+              "DEMAND_POTENTIAL_UNKNOWN",
+              "MIN_ORDER_EXCEEDS_TRIAL_BUDGET",
+              "MIN_ORDER_ABOVE_DEMAND_RANGE"
+            ],
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "observed_requests": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RequestStats"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "opportunity_id": {
+          "title": "Opportunity Id",
+          "type": "string"
+        },
+        "scores": {
+          "$ref": "#/$defs/OpportunityScores"
+        },
+        "signal_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Signal Ids",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "enum": [
+              "catalogue_gap",
+              "unmet_demand",
+              "category_growth",
+              "comparable",
+              "customer_requests"
+            ],
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "supplier_min_order_qty": {
+          "minimum": 1,
+          "title": "Supplier Min Order Qty",
+          "type": "integer"
+        },
+        "trial_cost": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The optimizer's line_cost.",
+          "title": "Trial Cost"
+        },
+        "trial_order_qty": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "From the optimizer under the trial budget; null = unavailable.",
+          "title": "Trial Order Qty"
+        },
+        "unit_cost": {
+          "minimum": 0.0,
+          "title": "Unit Cost",
+          "type": "number"
+        },
+        "unit_price": {
+          "minimum": 0.0,
+          "title": "Unit Price",
+          "type": "number"
+        }
+      },
+      "required": [
+        "opportunity_id",
+        "name",
+        "demand_basis",
+        "demand",
+        "basis_description",
+        "scores",
+        "unit_cost",
+        "unit_price",
+        "supplier_min_order_qty"
+      ],
+      "title": "Opportunity",
+      "type": "object"
+    },
+    "OpportunityScores": {
+      "additionalProperties": false,
+      "properties": {
+        "capital_requirement": {
+          "description": "Higher = more capital needed.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Capital Requirement",
+          "type": "number"
+        },
+        "competition": {
+          "description": "Higher = more competition.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Competition",
+          "type": "number"
+        },
+        "demand_potential": {
+          "description": "Item's mid demand relative to the median current product, capped at 1.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Demand Potential",
+          "type": "number"
+        },
+        "profitability": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Profitability",
+          "type": "number"
+        },
+        "uncertainty": {
+          "description": "Relative width of the demand range.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Uncertainty",
+          "type": "number"
+        }
+      },
+      "required": [
+        "demand_potential",
+        "competition",
+        "profitability",
+        "capital_requirement",
+        "uncertainty"
+      ],
+      "title": "OpportunityScores",
+      "type": "object"
+    },
+    "RequestStats": {
+      "additionalProperties": false,
+      "description": "Customer requests for an item the retailer does not stock (reviews, messages, notes).",
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "window_days": {
+          "description": "Period the count was collected over.",
+          "minimum": 1,
+          "title": "Window Days",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "count",
+        "window_days",
+        "source"
+      ],
+      "title": "RequestStats",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "budget": {
+      "minimum": 0.0,
+      "title": "Budget",
+      "type": "number"
+    },
+    "currency": {
+      "pattern": "^[A-Z]{3}$",
+      "title": "Currency",
+      "type": "string"
+    },
+    "excluded": {
+      "items": {
+        "$ref": "#/$defs/ExcludedCandidate"
+      },
+      "title": "Excluded",
+      "type": "array"
+    },
+    "horizon_days": {
+      "title": "Horizon Days",
+      "type": "integer"
+    },
+    "opportunities": {
+      "items": {
+        "$ref": "#/$defs/Opportunity"
+      },
+      "title": "Opportunities",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "trial_budget": {
+      "description": "Budget given to the optimizer for trial orders.",
+      "minimum": 0.0,
+      "title": "Trial Budget",
+      "type": "number"
+    },
+    "trial_orders_available": {
+      "description": "False if the optimizer was unavailable or skipped; trial fields are then null.",
+      "title": "Trial Orders Available",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "as_of",
+    "horizon_days",
+    "currency",
+    "budget",
+    "trial_budget",
+    "trial_orders_available",
+    "opportunities"
+  ],
+  "title": "OpportunityOutput",
+  "type": "object"
+}

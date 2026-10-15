@@ -1,0 +1,8 @@
+pandas
+numpy
+pydantic
+pyyaml
+statsmodels
+scikit-learn
+pytest
+pytest-cov

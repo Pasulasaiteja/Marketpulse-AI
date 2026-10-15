@@ -1,0 +1,1056 @@
+{
+  "scenario_5k": {
+    "plan": {
+      "total_cost": 4994.9,
+      "budget": 5000.0,
+      "budget_used": 4994.9,
+      "budget_remaining": 5.1,
+      "total_expected_profit": 4135.23,
+      "total_items_ordered": 1200,
+      "binding_constraints": [
+        "BUDGET"
+      ],
+      "items": {
+        "SKU_MILK_1L": {
+          "product_id": "SKU_MILK_1L",
+          "name": "Whole Milk 1L",
+          "order_qty": 192,
+          "cost": 230.4,
+          "unit_cost": 1.2,
+          "unit_price": 1.8,
+          "expected_profit": 211.67,
+          "expected_stockout_prob": 0.9859,
+          "expected_leftover": 0.43,
+          "critical_ratio": 0.3571,
+          "binding_constraints": [],
+          "reason_codes": [
+            "ALLOCATED_OPTIMAL",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.5238
+        },
+        "SKU_BREAD_WHITE": {
+          "product_id": "SKU_BREAD_WHITE",
+          "name": "Sliced White Bread",
+          "order_qty": 90,
+          "cost": 81.0,
+          "unit_cost": 0.9,
+          "unit_price": 1.5,
+          "expected_profit": 113.97,
+          "expected_stockout_prob": 0.9992,
+          "expected_leftover": 0.02,
+          "critical_ratio": 0.4,
+          "binding_constraints": [],
+          "reason_codes": [
+            "ALLOCATED_OPTIMAL",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.5526
+        },
+        "SKU_EGGS_DOZEN": {
+          "product_id": "SKU_EGGS_DOZEN",
+          "name": "Eggs 12-pack",
+          "order_qty": 160,
+          "cost": 352.0,
+          "unit_cost": 2.2,
+          "unit_price": 3.4,
+          "expected_profit": 260.3,
+          "expected_stockout_prob": 0.6842,
+          "expected_leftover": 10.7,
+          "critical_ratio": 0.381,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.65
+        },
+        "SKU_RICE_5KG": {
+          "product_id": "SKU_RICE_5KG",
+          "name": "Long Grain Rice 5kg",
+          "order_qty": 90,
+          "cost": 585.0,
+          "unit_cost": 6.5,
+          "unit_price": 9.5,
+          "expected_profit": 499.38,
+          "expected_stockout_prob": 0.6448,
+          "expected_leftover": 8.36,
+          "critical_ratio": 0.4511,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7083
+        },
+        "SKU_COOKING_OIL_2L": {
+          "product_id": "SKU_COOKING_OIL_2L",
+          "name": "Vegetable Cooking Oil 2L",
+          "order_qty": 90,
+          "cost": 432.0,
+          "unit_cost": 4.8,
+          "unit_price": 7.2,
+          "expected_profit": 284.56,
+          "expected_stockout_prob": 0.6451,
+          "expected_leftover": 7.37,
+          "critical_ratio": 0.4486,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7143
+        },
+        "SKU_SUGAR_2KG": {
+          "product_id": "SKU_SUGAR_2KG",
+          "name": "White Sugar 2kg",
+          "order_qty": 120,
+          "cost": 252.0,
+          "unit_cost": 2.1,
+          "unit_price": 3.2,
+          "expected_profit": 188.95,
+          "expected_stockout_prob": 0.6464,
+          "expected_leftover": 10.11,
+          "critical_ratio": 0.4825,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7
+        },
+        "SKU_FLOUR_5KG": {
+          "product_id": "SKU_FLOUR_5KG",
+          "name": "All-Purpose Flour 5kg",
+          "order_qty": 70,
+          "cost": 294.0,
+          "unit_cost": 4.2,
+          "unit_price": 6.0,
+          "expected_profit": 196.31,
+          "expected_stockout_prob": 0.7125,
+          "expected_leftover": 4.78,
+          "critical_ratio": 0.4369,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7222
+        },
+        "SKU_INSTANT_COFFEE": {
+          "product_id": "SKU_INSTANT_COFFEE",
+          "name": "Instant Coffee Jar 200g",
+          "order_qty": 48,
+          "cost": 360.0,
+          "unit_cost": 7.5,
+          "unit_price": 11.5,
+          "expected_profit": 251.59,
+          "expected_stockout_prob": 0.5914,
+          "expected_leftover": 6.72,
+          "critical_ratio": 0.4848,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 1.0
+        },
+        "SKU_BLACK_TEA_BOX": {
+          "product_id": "SKU_BLACK_TEA_BOX",
+          "name": "Black Tea Bags 100s",
+          "order_qty": 75,
+          "cost": 210.0,
+          "unit_cost": 2.8,
+          "unit_price": 4.4,
+          "expected_profit": 176.74,
+          "expected_stockout_prob": 0.5287,
+          "expected_leftover": 9.53,
+          "critical_ratio": 0.4878,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7222
+        },
+        "SKU_SODA_CASE_24": {
+          "product_id": "SKU_SODA_CASE_24",
+          "name": "Cola Soda Case (24 cans)",
+          "order_qty": 65,
+          "cost": 617.5,
+          "unit_cost": 9.5,
+          "unit_price": 16.0,
+          "expected_profit": 508.48,
+          "expected_stockout_prob": 0.559,
+          "expected_leftover": 8.62,
+          "critical_ratio": 0.5285,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8667
+        },
+        "SKU_POTATO_CHIPS_BOX": {
+          "product_id": "SKU_POTATO_CHIPS_BOX",
+          "name": "Potato Chips Box (20 bags)",
+          "order_qty": 52,
+          "cost": 520.0,
+          "unit_cost": 10.0,
+          "unit_price": 18.0,
+          "expected_profit": 488.78,
+          "expected_stockout_prob": 0.5519,
+          "expected_leftover": 7.47,
+          "critical_ratio": 0.5575,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.9167
+        },
+        "SKU_CHOCOLATE_BOX": {
+          "product_id": "SKU_CHOCOLATE_BOX",
+          "name": "Chocolate Bars Box (30 bars)",
+          "order_qty": 30,
+          "cost": 540.0,
+          "unit_cost": 18.0,
+          "unit_price": 30.0,
+          "expected_profit": 498.03,
+          "expected_stockout_prob": 0.6091,
+          "expected_leftover": 4.51,
+          "critical_ratio": 0.531,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 1.0526
+        },
+        "SKU_LAUNDRY_DETERGENT": {
+          "product_id": "SKU_LAUNDRY_DETERGENT",
+          "name": "Laundry Detergent Powder 3kg",
+          "order_qty": 54,
+          "cost": 297.0,
+          "unit_cost": 5.5,
+          "unit_price": 8.5,
+          "expected_profit": 226.28,
+          "expected_stockout_prob": 0.6122,
+          "expected_leftover": 6.13,
+          "critical_ratio": 0.4878,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8462
+        },
+        "SKU_BATH_SOAP_PACK": {
+          "product_id": "SKU_BATH_SOAP_PACK",
+          "name": "Bath Soap Bar (Pack of 6)",
+          "order_qty": 64,
+          "cost": 224.0,
+          "unit_cost": 3.5,
+          "unit_price": 5.6,
+          "expected_profit": 191.95,
+          "expected_stockout_prob": 0.5939,
+          "expected_leftover": 7.63,
+          "critical_ratio": 0.5,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8125
+        },
+        "SKU_EXOTIC_SPICE_CASE": {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "order_qty": 0,
+          "cost": 0.0,
+          "unit_cost": 45.0,
+          "unit_price": 68.0,
+          "expected_profit": 38.25,
+          "expected_stockout_prob": 0.8041,
+          "expected_leftover": 5.46,
+          "critical_ratio": 0.377,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "HIGH_UNCERTAINTY_HAIRCUT",
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "uncertainty_flag": true,
+          "relative_uncertainty": 4.64
+        }
+      },
+      "sensitivity": {
+        "100_percent": {
+          "budget_level": "100%",
+          "budget_amount": 5000.0,
+          "total_cost": 4994.9,
+          "total_expected_profit": 4135.23,
+          "items_ordered_count": 14
+        },
+        "80_percent": {
+          "budget_level": "80%",
+          "budget_amount": 4000.0,
+          "total_cost": 3990.0,
+          "total_expected_profit": 3907.12,
+          "items_ordered_count": 14
+        },
+        "60_percent": {
+          "budget_level": "60%",
+          "budget_amount": 3000.0,
+          "total_cost": 2996.1,
+          "total_expected_profit": 3519.79,
+          "items_ordered_count": 13
+        }
+      }
+    },
+    "facts": {
+      "summary": {
+        "budget": 5000.0,
+        "total_spend": 4994.9,
+        "expected_profit": 4135.23,
+        "budget_utilization_pct": 99.9,
+        "num_products_funded": 14,
+        "num_products_dropped": 1
+      },
+      "top_allocations": [
+        {
+          "product_id": "SKU_SODA_CASE_24",
+          "name": "Cola Soda Case (24 cans)",
+          "qty": 65,
+          "spend": 617.5,
+          "expected_profit": 508.48,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_RICE_5KG",
+          "name": "Long Grain Rice 5kg",
+          "qty": 90,
+          "spend": 585.0,
+          "expected_profit": 499.38,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_CHOCOLATE_BOX",
+          "name": "Chocolate Bars Box (30 bars)",
+          "qty": 30,
+          "spend": 540.0,
+          "expected_profit": 498.03,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_POTATO_CHIPS_BOX",
+          "name": "Potato Chips Box (20 bags)",
+          "qty": 52,
+          "spend": 520.0,
+          "expected_profit": 488.78,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_COOKING_OIL_2L",
+          "name": "Vegetable Cooking Oil 2L",
+          "qty": 90,
+          "spend": 432.0,
+          "expected_profit": 284.56,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        }
+      ],
+      "dropped_items": [
+        {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "unit_cost": 45.0,
+          "reason_codes": [
+            "HIGH_UNCERTAINTY_HAIRCUT",
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "explanation": "Working capital exhausted before reaching this item's minimum order requirement."
+        }
+      ],
+      "uncertainty_alerts": [
+        {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "relative_uncertainty": 4.64,
+          "status": "Dropped due to risk",
+          "note": "Relative uncertainty ratio is 4.64 (above 1.25 safety threshold)."
+        }
+      ],
+      "binding_constraints": [
+        "BUDGET"
+      ],
+      "budget_bottleneck": "Budget is fully binding (99.9% utilized). At 100% budget ($5,000.00), the plan captures $228.11 more profit than at 80%.",
+      "sensitivity": {
+        "100_percent": {
+          "budget_level": "100%",
+          "budget_amount": 5000.0,
+          "total_cost": 4994.9,
+          "total_expected_profit": 4135.23,
+          "items_ordered_count": 14
+        },
+        "80_percent": {
+          "budget_level": "80%",
+          "budget_amount": 4000.0,
+          "total_cost": 3990.0,
+          "total_expected_profit": 3907.12,
+          "items_ordered_count": 14
+        },
+        "60_percent": {
+          "budget_level": "60%",
+          "budget_amount": 3000.0,
+          "total_cost": 2996.1,
+          "total_expected_profit": 3519.79,
+          "items_ordered_count": 13
+        }
+      }
+    }
+  },
+  "scenario_3k": {
+    "plan": {
+      "total_cost": 2996.1,
+      "budget": 3000.0,
+      "budget_used": 2996.1,
+      "budget_remaining": 3.9,
+      "total_expected_profit": 3519.79,
+      "total_items_ordered": 810,
+      "binding_constraints": [
+        "BUDGET"
+      ],
+      "items": {
+        "SKU_MILK_1L": {
+          "product_id": "SKU_MILK_1L",
+          "name": "Whole Milk 1L",
+          "order_qty": 192,
+          "cost": 230.4,
+          "unit_cost": 1.2,
+          "unit_price": 1.8,
+          "expected_profit": 211.67,
+          "expected_stockout_prob": 0.9859,
+          "expected_leftover": 0.43,
+          "critical_ratio": 0.3571,
+          "binding_constraints": [],
+          "reason_codes": [
+            "ALLOCATED_OPTIMAL",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.5238
+        },
+        "SKU_BREAD_WHITE": {
+          "product_id": "SKU_BREAD_WHITE",
+          "name": "Sliced White Bread",
+          "order_qty": 90,
+          "cost": 81.0,
+          "unit_cost": 0.9,
+          "unit_price": 1.5,
+          "expected_profit": 113.97,
+          "expected_stockout_prob": 0.9992,
+          "expected_leftover": 0.02,
+          "critical_ratio": 0.4,
+          "binding_constraints": [],
+          "reason_codes": [
+            "ALLOCATED_OPTIMAL",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.5526
+        },
+        "SKU_EGGS_DOZEN": {
+          "product_id": "SKU_EGGS_DOZEN",
+          "name": "Eggs 12-pack",
+          "order_qty": 120,
+          "cost": 264.0,
+          "unit_cost": 2.2,
+          "unit_price": 3.4,
+          "expected_profit": 237.53,
+          "expected_stockout_prob": 0.8931,
+          "expected_leftover": 2.69,
+          "critical_ratio": 0.381,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.65
+        },
+        "SKU_RICE_5KG": {
+          "product_id": "SKU_RICE_5KG",
+          "name": "Long Grain Rice 5kg",
+          "order_qty": 30,
+          "cost": 195.0,
+          "unit_cost": 6.5,
+          "unit_price": 9.5,
+          "expected_profit": 373.49,
+          "expected_stockout_prob": 0.982,
+          "expected_leftover": 0.23,
+          "critical_ratio": 0.4511,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7083
+        },
+        "SKU_COOKING_OIL_2L": {
+          "product_id": "SKU_COOKING_OIL_2L",
+          "name": "Vegetable Cooking Oil 2L",
+          "order_qty": 54,
+          "cost": 259.2,
+          "unit_cost": 4.8,
+          "unit_price": 7.2,
+          "expected_profit": 233.26,
+          "expected_stockout_prob": 0.9388,
+          "expected_leftover": 0.81,
+          "critical_ratio": 0.4486,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7143
+        },
+        "SKU_SUGAR_2KG": {
+          "product_id": "SKU_SUGAR_2KG",
+          "name": "White Sugar 2kg",
+          "order_qty": 80,
+          "cost": 168.0,
+          "unit_cost": 2.1,
+          "unit_price": 3.2,
+          "expected_profit": 163.8,
+          "expected_stockout_prob": 0.9067,
+          "expected_leftover": 1.84,
+          "critical_ratio": 0.4825,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7
+        },
+        "SKU_FLOUR_5KG": {
+          "product_id": "SKU_FLOUR_5KG",
+          "name": "All-Purpose Flour 5kg",
+          "order_qty": 0,
+          "cost": 0.0,
+          "unit_cost": 4.2,
+          "unit_price": 6.0,
+          "expected_profit": 89.98,
+          "expected_stockout_prob": 0.9993,
+          "expected_leftover": 0.01,
+          "critical_ratio": 0.4369,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7222
+        },
+        "SKU_INSTANT_COFFEE": {
+          "product_id": "SKU_INSTANT_COFFEE",
+          "name": "Instant Coffee Jar 200g",
+          "order_qty": 24,
+          "cost": 180.0,
+          "unit_cost": 7.5,
+          "unit_price": 11.5,
+          "expected_profit": 202.08,
+          "expected_stockout_prob": 0.9,
+          "expected_leftover": 1.08,
+          "critical_ratio": 0.4848,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 1.0
+        },
+        "SKU_BLACK_TEA_BOX": {
+          "product_id": "SKU_BLACK_TEA_BOX",
+          "name": "Black Tea Bags 100s",
+          "order_qty": 45,
+          "cost": 126.0,
+          "unit_cost": 2.8,
+          "unit_price": 4.4,
+          "expected_profit": 155.35,
+          "expected_stockout_prob": 0.8883,
+          "expected_leftover": 1.42,
+          "critical_ratio": 0.4878,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.7222
+        },
+        "SKU_SODA_CASE_24": {
+          "product_id": "SKU_SODA_CASE_24",
+          "name": "Cola Soda Case (24 cans)",
+          "order_qty": 45,
+          "cost": 427.5,
+          "unit_cost": 9.5,
+          "unit_price": 16.0,
+          "expected_profit": 452.86,
+          "expected_stockout_prob": 0.8191,
+          "expected_leftover": 2.57,
+          "critical_ratio": 0.5285,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8667
+        },
+        "SKU_POTATO_CHIPS_BOX": {
+          "product_id": "SKU_POTATO_CHIPS_BOX",
+          "name": "Potato Chips Box (20 bags)",
+          "order_qty": 40,
+          "cost": 400.0,
+          "unit_cost": 10.0,
+          "unit_price": 18.0,
+          "expected_profit": 452.35,
+          "expected_stockout_prob": 0.7491,
+          "expected_leftover": 3.32,
+          "critical_ratio": 0.5575,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.9167
+        },
+        "SKU_CHOCOLATE_BOX": {
+          "product_id": "SKU_CHOCOLATE_BOX",
+          "name": "Chocolate Bars Box (30 bars)",
+          "order_qty": 20,
+          "cost": 360.0,
+          "unit_cost": 18.0,
+          "unit_price": 30.0,
+          "expected_profit": 442.02,
+          "expected_stockout_prob": 0.8127,
+          "expected_leftover": 1.68,
+          "critical_ratio": 0.531,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 1.0526
+        },
+        "SKU_LAUNDRY_DETERGENT": {
+          "product_id": "SKU_LAUNDRY_DETERGENT",
+          "name": "Laundry Detergent Powder 3kg",
+          "order_qty": 30,
+          "cost": 165.0,
+          "unit_cost": 5.5,
+          "unit_price": 8.5,
+          "expected_profit": 186.36,
+          "expected_stockout_prob": 0.9117,
+          "expected_leftover": 0.92,
+          "critical_ratio": 0.4878,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8462
+        },
+        "SKU_BATH_SOAP_PACK": {
+          "product_id": "SKU_BATH_SOAP_PACK",
+          "name": "Bath Soap Bar (Pack of 6)",
+          "order_qty": 40,
+          "cost": 140.0,
+          "unit_cost": 3.5,
+          "unit_price": 5.6,
+          "expected_profit": 166.82,
+          "expected_stockout_prob": 0.8757,
+          "expected_leftover": 1.61,
+          "critical_ratio": 0.5,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "ALLOCATED_TRIMMED_BUDGET",
+            "PACK_SIZE_ROUNDED"
+          ],
+          "uncertainty_flag": false,
+          "relative_uncertainty": 0.8125
+        },
+        "SKU_EXOTIC_SPICE_CASE": {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "order_qty": 0,
+          "cost": 0.0,
+          "unit_cost": 45.0,
+          "unit_price": 68.0,
+          "expected_profit": 38.25,
+          "expected_stockout_prob": 0.8041,
+          "expected_leftover": 5.46,
+          "critical_ratio": 0.377,
+          "binding_constraints": [
+            "BUDGET"
+          ],
+          "reason_codes": [
+            "HIGH_UNCERTAINTY_HAIRCUT",
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "uncertainty_flag": true,
+          "relative_uncertainty": 4.64
+        }
+      },
+      "sensitivity": {
+        "100_percent": {
+          "budget_level": "100%",
+          "budget_amount": 3000.0,
+          "total_cost": 2996.1,
+          "total_expected_profit": 3519.79,
+          "items_ordered_count": 13
+        },
+        "80_percent": {
+          "budget_level": "80%",
+          "budget_amount": 2400.0,
+          "total_cost": 2394.2,
+          "total_expected_profit": 3242.36,
+          "items_ordered_count": 12
+        },
+        "60_percent": {
+          "budget_level": "60%",
+          "budget_amount": 1800.0,
+          "total_cost": 1800.0,
+          "total_expected_profit": 2949.55,
+          "items_ordered_count": 10
+        }
+      }
+    },
+    "facts": {
+      "summary": {
+        "budget": 3000.0,
+        "total_spend": 2996.1,
+        "expected_profit": 3519.79,
+        "budget_utilization_pct": 99.87,
+        "num_products_funded": 13,
+        "num_products_dropped": 2
+      },
+      "top_allocations": [
+        {
+          "product_id": "SKU_SODA_CASE_24",
+          "name": "Cola Soda Case (24 cans)",
+          "qty": 45,
+          "spend": 427.5,
+          "expected_profit": 452.86,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_POTATO_CHIPS_BOX",
+          "name": "Potato Chips Box (20 bags)",
+          "qty": 40,
+          "spend": 400.0,
+          "expected_profit": 452.35,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_CHOCOLATE_BOX",
+          "name": "Chocolate Bars Box (30 bars)",
+          "qty": 20,
+          "spend": 360.0,
+          "expected_profit": 442.02,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_RICE_5KG",
+          "name": "Long Grain Rice 5kg",
+          "qty": 30,
+          "spend": 195.0,
+          "expected_profit": 373.49,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        },
+        {
+          "product_id": "SKU_EGGS_DOZEN",
+          "name": "Eggs 12-pack",
+          "qty": 120,
+          "spend": 264.0,
+          "expected_profit": 237.53,
+          "reason": "Funded partially to preserve cash under current budget; Rounded to supplier pack multiple"
+        }
+      ],
+      "dropped_items": [
+        {
+          "product_id": "SKU_FLOUR_5KG",
+          "name": "All-Purpose Flour 5kg",
+          "unit_cost": 4.2,
+          "reason_codes": [
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "explanation": "Working capital exhausted before reaching this item's minimum order requirement."
+        },
+        {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "unit_cost": 45.0,
+          "reason_codes": [
+            "HIGH_UNCERTAINTY_HAIRCUT",
+            "DROPPED_BUDGET_EXHAUSTED"
+          ],
+          "explanation": "Working capital exhausted before reaching this item's minimum order requirement."
+        }
+      ],
+      "uncertainty_alerts": [
+        {
+          "product_id": "SKU_EXOTIC_SPICE_CASE",
+          "name": "Imported Gourmet Saffron Case",
+          "relative_uncertainty": 4.64,
+          "status": "Dropped due to risk",
+          "note": "Relative uncertainty ratio is 4.64 (above 1.25 safety threshold)."
+        }
+      ],
+      "binding_constraints": [
+        "BUDGET"
+      ],
+      "budget_bottleneck": "Budget is fully binding (99.9% utilized). At 100% budget ($3,000.00), the plan captures $277.43 more profit than at 80%.",
+      "sensitivity": {
+        "100_percent": {
+          "budget_level": "100%",
+          "budget_amount": 3000.0,
+          "total_cost": 2996.1,
+          "total_expected_profit": 3519.79,
+          "items_ordered_count": 13
+        },
+        "80_percent": {
+          "budget_level": "80%",
+          "budget_amount": 2400.0,
+          "total_cost": 2394.2,
+          "total_expected_profit": 3242.36,
+          "items_ordered_count": 12
+        },
+        "60_percent": {
+          "budget_level": "60%",
+          "budget_amount": 1800.0,
+          "total_cost": 1800.0,
+          "total_expected_profit": 2949.55,
+          "items_ordered_count": 10
+        }
+      }
+    }
+  },
+  "trade_offs": [
+    {
+      "product_id": "SKU_MILK_1L",
+      "name": "Whole Milk 1L",
+      "qty_5k": 192,
+      "cost_5k": 230.4,
+      "qty_3k": 192,
+      "cost_3k": 230.4,
+      "status_change": "PROTECTED (Core bread-and-butter item)"
+    },
+    {
+      "product_id": "SKU_BREAD_WHITE",
+      "name": "Sliced White Bread",
+      "qty_5k": 90,
+      "cost_5k": 81.0,
+      "qty_3k": 90,
+      "cost_3k": 81.0,
+      "status_change": "PROTECTED (Core bread-and-butter item)"
+    },
+    {
+      "product_id": "SKU_EGGS_DOZEN",
+      "name": "Eggs 12-pack",
+      "qty_5k": 160,
+      "cost_5k": 352.0,
+      "qty_3k": 120,
+      "cost_3k": 264.0,
+      "status_change": "TRIMMED by 40 units"
+    },
+    {
+      "product_id": "SKU_RICE_5KG",
+      "name": "Long Grain Rice 5kg",
+      "qty_5k": 90,
+      "cost_5k": 585.0,
+      "qty_3k": 30,
+      "cost_3k": 195.0,
+      "status_change": "TRIMMED by 60 units"
+    },
+    {
+      "product_id": "SKU_COOKING_OIL_2L",
+      "name": "Vegetable Cooking Oil 2L",
+      "qty_5k": 90,
+      "cost_5k": 432.0,
+      "qty_3k": 54,
+      "cost_3k": 259.2,
+      "status_change": "TRIMMED by 36 units"
+    },
+    {
+      "product_id": "SKU_SUGAR_2KG",
+      "name": "White Sugar 2kg",
+      "qty_5k": 120,
+      "cost_5k": 252.0,
+      "qty_3k": 80,
+      "cost_3k": 168.0,
+      "status_change": "TRIMMED by 40 units"
+    },
+    {
+      "product_id": "SKU_FLOUR_5KG",
+      "name": "All-Purpose Flour 5kg",
+      "qty_5k": 70,
+      "cost_5k": 294.0,
+      "qty_3k": 0,
+      "cost_3k": 0.0,
+      "status_change": "DROPPED (Capital preserved for staples)"
+    },
+    {
+      "product_id": "SKU_INSTANT_COFFEE",
+      "name": "Instant Coffee Jar 200g",
+      "qty_5k": 48,
+      "cost_5k": 360.0,
+      "qty_3k": 24,
+      "cost_3k": 180.0,
+      "status_change": "TRIMMED by 24 units"
+    },
+    {
+      "product_id": "SKU_BLACK_TEA_BOX",
+      "name": "Black Tea Bags 100s",
+      "qty_5k": 75,
+      "cost_5k": 210.0,
+      "qty_3k": 45,
+      "cost_3k": 126.0,
+      "status_change": "TRIMMED by 30 units"
+    },
+    {
+      "product_id": "SKU_SODA_CASE_24",
+      "name": "Cola Soda Case (24 cans)",
+      "qty_5k": 65,
+      "cost_5k": 617.5,
+      "qty_3k": 45,
+      "cost_3k": 427.5,
+      "status_change": "TRIMMED by 20 units"
+    },
+    {
+      "product_id": "SKU_POTATO_CHIPS_BOX",
+      "name": "Potato Chips Box (20 bags)",
+      "qty_5k": 52,
+      "cost_5k": 520.0,
+      "qty_3k": 40,
+      "cost_3k": 400.0,
+      "status_change": "TRIMMED by 12 units"
+    },
+    {
+      "product_id": "SKU_CHOCOLATE_BOX",
+      "name": "Chocolate Bars Box (30 bars)",
+      "qty_5k": 30,
+      "cost_5k": 540.0,
+      "qty_3k": 20,
+      "cost_3k": 360.0,
+      "status_change": "TRIMMED by 10 units"
+    },
+    {
+      "product_id": "SKU_LAUNDRY_DETERGENT",
+      "name": "Laundry Detergent Powder 3kg",
+      "qty_5k": 54,
+      "cost_5k": 297.0,
+      "qty_3k": 30,
+      "cost_3k": 165.0,
+      "status_change": "TRIMMED by 24 units"
+    },
+    {
+      "product_id": "SKU_BATH_SOAP_PACK",
+      "name": "Bath Soap Bar (Pack of 6)",
+      "qty_5k": 64,
+      "cost_5k": 224.0,
+      "qty_3k": 40,
+      "cost_3k": 140.0,
+      "status_change": "TRIMMED by 24 units"
+    },
+    {
+      "product_id": "SKU_EXOTIC_SPICE_CASE",
+      "name": "Imported Gourmet Saffron Case",
+      "qty_5k": 0,
+      "cost_5k": 0.0,
+      "qty_3k": 0,
+      "cost_3k": 0.0,
+      "status_change": "UNFUNDED"
+    }
+  ],
+  "executive_summary": {
+    "profit_difference": 615.44,
+    "units_difference": 390,
+    "protected_staples": [
+      "Whole Milk 1L",
+      "Sliced White Bread"
+    ],
+    "dropped_items": [
+      "All-Purpose Flour 5kg"
+    ]
+  }
+}

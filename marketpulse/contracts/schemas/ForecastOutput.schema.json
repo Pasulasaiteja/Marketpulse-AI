@@ -1,0 +1,124 @@
+{
+  "$defs": {
+    "ProductForecast": {
+      "additionalProperties": false,
+      "properties": {
+        "cold_start": {
+          "default": false,
+          "title": "Cold Start",
+          "type": "boolean"
+        },
+        "history_days": {
+          "minimum": 0,
+          "title": "History Days",
+          "type": "integer"
+        },
+        "low_data": {
+          "default": false,
+          "title": "Low Data",
+          "type": "boolean"
+        },
+        "mean": {
+          "description": "Expected units demanded over the horizon.",
+          "minimum": 0.0,
+          "title": "Mean",
+          "type": "number"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "quantiles": {
+          "description": "Exactly the grid in config.QUANTILE_GRID, ascending, non-decreasing values.",
+          "items": {
+            "$ref": "#/$defs/QuantilePoint"
+          },
+          "title": "Quantiles",
+          "type": "array"
+        }
+      },
+      "required": [
+        "product_id",
+        "mean",
+        "quantiles",
+        "history_days"
+      ],
+      "title": "ProductForecast",
+      "type": "object"
+    },
+    "QuantilePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "p": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "P",
+          "type": "number"
+        },
+        "value": {
+          "minimum": 0.0,
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "p",
+        "value"
+      ],
+      "title": "QuantilePoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "context_features_used": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Context Features Used",
+      "type": "array"
+    },
+    "forecasts": {
+      "items": {
+        "$ref": "#/$defs/ProductForecast"
+      },
+      "title": "Forecasts",
+      "type": "array"
+    },
+    "horizon_days": {
+      "title": "Horizon Days",
+      "type": "integer"
+    },
+    "model_name": {
+      "title": "Model Name",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "signals_used": {
+      "description": "signal_ids",
+      "items": {
+        "type": "string"
+      },
+      "title": "Signals Used",
+      "type": "array"
+    }
+  },
+  "required": [
+    "as_of",
+    "horizon_days",
+    "model_name",
+    "forecasts"
+  ],
+  "title": "ForecastOutput",
+  "type": "object"
+}

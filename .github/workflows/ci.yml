@@ -1,0 +1,16 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements-dev.txt
+      - run: playwright install --with-deps chromium  # UI tests run in real Chromium
+      - run: ruff check marketpulse tests scripts
+      # Contract tests are part of the suite: any schema drift or module
+      # boundary mismatch fails the build.
+      - run: pytest

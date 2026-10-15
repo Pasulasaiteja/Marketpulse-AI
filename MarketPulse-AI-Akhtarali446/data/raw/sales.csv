@@ -1,0 +1,4 @@
+date,store_id,item_id,sales_quantity,price,on_promotion
+2026-10-01,STORE_001,ITEM_101,25.0,100.0,False
+2026-10-01,STORE_001,ITEM_102,40.0,60.0,True
+2026-10-01,STORE_002,ITEM_101,10.0,100.0,False

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marketpulse-forecasting"
+version = "0.1.0"
+description = "MarketPulse AI: Demand Forecasting and Market Signals Engine (Member 2)"
+authors = [{ name = "Member 2 Team" }]
+readme = "README_MEMBER2.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26.0,<2.5.0",
+    "pandas>=2.1.0,<3.1.0",
+    "scipy>=1.12.0",
+    "scikit-learn>=1.4.0",
+    "lightgbm>=4.0.0",
+    "statsmodels>=0.14.0",
+    "xgboost>=2.0.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "pydantic>=2.5.0"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

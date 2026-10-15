@@ -1,0 +1,5 @@
+date,store_id,feature_name,value,source,is_fallback
+2026-10-01,STORE_001,is_payday,1.0,south_asia_adapter,False
+2026-10-01,STORE_001,temperature_c,31.5,south_asia_adapter,False
+2026-10-01,STORE_002,is_payday,1.0,south_asia_adapter,False
+2026-10-01,STORE_002,temperature_c,22.0,default_fallback,True

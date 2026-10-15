@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+.venv/
+venv/
+logs/
+.system_generated/
+.kilo/
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "ContextFeature": {
+      "additionalProperties": false,
+      "properties": {
+        "fallback_used": {
+          "default": false,
+          "title": "Fallback Used",
+          "type": "boolean"
+        },
+        "is_assumption": {
+          "description": "True if the value/effect is hand-set rather than learned or sourced.",
+          "title": "Is Assumption",
+          "type": "boolean"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "source_available": {
+          "default": true,
+          "title": "Source Available",
+          "type": "boolean"
+        },
+        "tier": {
+          "enum": [
+            "calendar",
+            "economic",
+            "shock",
+            "profile"
+          ],
+          "title": "Tier",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "tier",
+        "is_assumption"
+      ],
+      "title": "ContextFeature",
+      "type": "object"
+    },
+    "ShockAlert": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "widen_interval_factor": {
+          "default": 1.0,
+          "minimum": 1.0,
+          "title": "Widen Interval Factor",
+          "type": "number"
+        }
+      },
+      "required": [
+        "code",
+        "description"
+      ],
+      "title": "ShockAlert",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "alerts": {
+      "items": {
+        "$ref": "#/$defs/ShockAlert"
+      },
+      "title": "Alerts",
+      "type": "array"
+    },
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "features": {
+      "items": {
+        "$ref": "#/$defs/ContextFeature"
+      },
+      "title": "Features",
+      "type": "array"
+    },
+    "horizon_days": {
+      "title": "Horizon Days",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "as_of",
+    "horizon_days",
+    "features"
+  ],
+  "title": "ContextFeatures",
+  "type": "object"
+}

@@ -1,0 +1,43 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "fallback_used": {
+      "default": false,
+      "title": "Fallback Used",
+      "type": "boolean"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "module": {
+      "enum": [
+        "extractor",
+        "context",
+        "forecaster",
+        "optimizer",
+        "explainer",
+        "signals",
+        "opportunities"
+      ],
+      "title": "Module",
+      "type": "string"
+    },
+    "retryable": {
+      "default": false,
+      "title": "Retryable",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "module",
+    "code",
+    "message"
+  ],
+  "title": "ModuleError",
+  "type": "object"
+}

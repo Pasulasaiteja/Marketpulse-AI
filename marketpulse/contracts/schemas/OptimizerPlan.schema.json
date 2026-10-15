@@ -1,0 +1,279 @@
+{
+  "$defs": {
+    "BudgetPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "budget": {
+          "minimum": 0.0,
+          "title": "Budget",
+          "type": "number"
+        },
+        "expected_total_profit": {
+          "title": "Expected Total Profit",
+          "type": "number"
+        },
+        "total_cost": {
+          "minimum": 0.0,
+          "title": "Total Cost",
+          "type": "number"
+        }
+      },
+      "required": [
+        "budget",
+        "total_cost",
+        "expected_total_profit"
+      ],
+      "title": "BudgetPoint",
+      "type": "object"
+    },
+    "Interval": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "title": "High",
+          "type": "number"
+        },
+        "low": {
+          "title": "Low",
+          "type": "number"
+        }
+      },
+      "required": [
+        "low",
+        "high"
+      ],
+      "title": "Interval",
+      "type": "object"
+    },
+    "PlanLine": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_demand": {
+          "minimum": 0.0,
+          "title": "Expected Demand",
+          "type": "number"
+        },
+        "expected_profit": {
+          "title": "Expected Profit",
+          "type": "number"
+        },
+        "expected_sales_units": {
+          "minimum": 0.0,
+          "title": "Expected Sales Units",
+          "type": "number"
+        },
+        "line_cost": {
+          "minimum": 0.0,
+          "title": "Line Cost",
+          "type": "number"
+        },
+        "order_qty": {
+          "minimum": 0,
+          "title": "Order Qty",
+          "type": "integer"
+        },
+        "product_id": {
+          "title": "Product Id",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "enum": [
+              "HIGH_PROFIT_PER_CURRENCY",
+              "BUDGET_BINDING",
+              "HIGH_UNCERTAINTY_REDUCED_QTY",
+              "MIN_ORDER_QTY_APPLIED",
+              "STORAGE_LIMIT",
+              "ALREADY_STOCKED",
+              "LOW_MARGIN",
+              "EXPIRY_LIMIT",
+              "LOW_DATA_CAUTION",
+              "NOT_AFFORDABLE"
+            ],
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "stockout_probability": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Stockout Probability",
+          "type": "number"
+        },
+        "target_quantile": {
+          "description": "Service level used for this product.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Target Quantile",
+          "type": "number"
+        },
+        "uncertainty": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Uncertainty",
+          "type": "string"
+        },
+        "unit_cost": {
+          "minimum": 0.0,
+          "title": "Unit Cost",
+          "type": "number"
+        }
+      },
+      "required": [
+        "product_id",
+        "order_qty",
+        "unit_cost",
+        "line_cost",
+        "expected_demand",
+        "target_quantile",
+        "expected_sales_units",
+        "expected_profit",
+        "stockout_probability",
+        "uncertainty"
+      ],
+      "title": "PlanLine",
+      "type": "object"
+    },
+    "Risk": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "description": {
+          "description": "English text; numbers inside must come from the plan.",
+          "title": "Description",
+          "type": "string"
+        },
+        "product_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Product Id"
+        },
+        "severity": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "description"
+      ],
+      "title": "Risk",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "binding_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Binding Constraints",
+      "type": "array"
+    },
+    "budget": {
+      "minimum": 0.0,
+      "title": "Budget",
+      "type": "number"
+    },
+    "budget_sensitivity": {
+      "description": "What happens under different budgets (optional).",
+      "items": {
+        "$ref": "#/$defs/BudgetPoint"
+      },
+      "title": "Budget Sensitivity",
+      "type": "array"
+    },
+    "capital_utilization": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Capital Utilization",
+      "type": "number"
+    },
+    "currency": {
+      "pattern": "^[A-Z]{3}$",
+      "title": "Currency",
+      "type": "string"
+    },
+    "expected_profit_interval": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Interval"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "expected_total_profit": {
+      "title": "Expected Total Profit",
+      "type": "number"
+    },
+    "horizon_days": {
+      "title": "Horizon Days",
+      "type": "integer"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/PlanLine"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "risks": {
+      "items": {
+        "$ref": "#/$defs/Risk"
+      },
+      "title": "Risks",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "total_cost": {
+      "minimum": 0.0,
+      "title": "Total Cost",
+      "type": "number"
+    }
+  },
+  "required": [
+    "as_of",
+    "horizon_days",
+    "currency",
+    "budget",
+    "total_cost",
+    "capital_utilization",
+    "expected_total_profit",
+    "lines"
+  ],
+  "title": "OptimizerPlan",
+  "type": "object"
+}

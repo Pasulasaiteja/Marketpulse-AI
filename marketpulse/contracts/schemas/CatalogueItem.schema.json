@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "RequestStats": {
+      "additionalProperties": false,
+      "description": "Customer requests for an item the retailer does not stock (reviews, messages, notes).",
+      "properties": {
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "window_days": {
+          "description": "Period the count was collected over.",
+          "minimum": 1,
+          "title": "Window Days",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "count",
+        "window_days",
+        "source"
+      ],
+      "title": "RequestStats",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One candidate product from a supplier catalogue / public price data (INPUT to Component D).",
+  "properties": {
+    "category": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Category"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "requests": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RequestStats"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "sellers_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Sellers of this item in public price data; null = unknown.",
+      "title": "Sellers Count"
+    },
+    "source": {
+      "description": "Where this row came from (supplier list, public prices, ...).",
+      "title": "Source",
+      "type": "string"
+    },
+    "supplier_available": {
+      "default": true,
+      "title": "Supplier Available",
+      "type": "boolean"
+    },
+    "supplier_min_order_qty": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Supplier Min Order Qty",
+      "type": "integer"
+    },
+    "unit_cost": {
+      "description": "Supplier price per unit.",
+      "minimum": 0.0,
+      "title": "Unit Cost",
+      "type": "number"
+    },
+    "unit_price": {
+      "description": "Typical public selling price per unit.",
+      "minimum": 0.0,
+      "title": "Unit Price",
+      "type": "number"
+    }
+  },
+  "required": [
+    "item_id",
+    "name",
+    "unit_cost",
+    "unit_price",
+    "source"
+  ],
+  "title": "CatalogueItem",
+  "type": "object"
+}

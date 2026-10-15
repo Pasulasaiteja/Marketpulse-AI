@@ -1,0 +1,7 @@
+product_id,name,unit_cost,unit_price,current_stock,on_order,lead_time_days,min_order_qty,category
+P001,Rice 5kg,60.0,80.0,40.0,0.0,3,10,grocery
+P002,Cooking oil 1L,25.0,35.0,30.0,0.0,3,12,grocery
+P003,Notebook A5,6.0,12.0,80.0,0.0,3,50,stationery
+P004,Phone airtime card,9.0,10.0,0.0,0.0,3,20,services
+P005,Laundry soap,8.0,14.0,25.0,0.0,3,24,household
+P006,Bottled water 1.5L,5.0,9.0,60.0,0.0,3,24,grocery

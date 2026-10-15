@@ -1,0 +1,4 @@
+store_id,store_name,location_type,population_class,region_id
+STORE_001,Lahore Flagship,urban_flagship,high_density,south_asia
+STORE_002,Quetta Express,rural_kiosk,low_density,south_asia
+STORE_003,Quito Central,urban_flagship,medium_density,ecuador

@@ -1,0 +1,4 @@
+item_id,category_id,cost_price,selling_price
+ITEM_101,dairy,80.0,100.0
+ITEM_102,beverages,45.0,60.0
+ITEM_103,staples,150.0,180.0
