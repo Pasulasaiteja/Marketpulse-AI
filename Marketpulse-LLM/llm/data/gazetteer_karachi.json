@@ -1,0 +1,48 @@
+{
+  "region": "south_asia_karachi",
+  "currency": "PKR",
+  "entries": [
+    {
+      "name": "Clifton",
+      "aliases": ["Clifton Block 5"],
+      "location_type": "urban_flagship",
+      "kind": "neighborhood"
+    },
+    {
+      "name": "Clifton Block 5",
+      "aliases": ["Clifton"],
+      "location_type": "urban_flagship",
+      "kind": "neighborhood"
+    },
+    {
+      "name": "Empress Market",
+      "aliases": ["Saddar Empress Market"],
+      "location_type": "urban_flagship",
+      "kind": "market"
+    },
+    {
+      "name": "Liaquatabad",
+      "aliases": ["Liaquatabad Market", "Liaqatabad"],
+      "location_type": "suburban_medium",
+      "kind": "neighborhood"
+    },
+    {
+      "name": "North Nazimabad",
+      "aliases": ["Nazimabad"],
+      "location_type": "suburban_medium",
+      "kind": "neighborhood"
+    },
+    {
+      "name": "Gadap Town",
+      "aliases": ["Gadap"],
+      "location_type": "rural_kiosk",
+      "kind": "town"
+    },
+    {
+      "name": "Surjani Town",
+      "aliases": ["Surjani"],
+      "location_type": "rural_kiosk",
+      "kind": "town"
+    }
+  ]
+}
