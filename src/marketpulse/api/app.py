@@ -1,6 +1,6 @@
 """FastAPI Decision API.
 
-Endpoints: /profile/extract, /profile/confirm, /plan, /ask, /opportunities.
+Endpoints: /profile/extract, /profile/confirm, /plan, /chain/plan, /ask, /opportunities.
 Run:  uvicorn marketpulse.api.app:app --reload
 """
 
@@ -62,6 +62,19 @@ class StoresRequest(_Req):
     as_of: dt.date | None = None
 
 
+class ChainPlanRequest(_Req):
+    """Chain-wide view: one plan per store (each with its own budget), then the totals."""
+
+    profile_id: str
+    budget: float = Field(description="Default budget applied to each store.")
+    horizon_days: int = 14
+    language: str | None = None
+    dataset_ids: list[str] = Field(min_length=1, description="Store dataset_ids from /stores.")
+    store_budgets: dict[str, float] | None = Field(
+        default=None, description="Optional per-store budget overrides, keyed by dataset_id.")
+    constraints: OptimizerConstraints | None = None
+
+
 class OpportunityRequest(_Req):
     profile_id: str
     budget: float
@@ -73,6 +86,7 @@ class OpportunityRequest(_Req):
     shop_id: str | None = None
     as_of: dt.date | None = None
     catalogue: list[CatalogueItem] | None = None
+    catalogue_csv: str | None = None
     include_trial_orders: bool = True
 
 
@@ -136,6 +150,12 @@ def create_app(modules: Modules | None = None, audit_path: str | None = "logs/au
     def stores(req: StoresRequest) -> dict[str, Any]:
         """Register every store in multi-store CSVs; use each returned dataset_id with /plan."""
         return service.register_stores(req.model_dump(mode="json"))
+
+    @app.post("/chain/plan")
+    def chain_plan(req: ChainPlanRequest) -> dict[str, Any]:
+        """Plan every store independently and return per-store plans plus chain-wide totals."""
+        return service.chain_plan(req.model_dump(exclude_none=False) | {
+            "constraints": req.constraints})
 
     @app.get("/", include_in_schema=False)
     def root() -> RedirectResponse:

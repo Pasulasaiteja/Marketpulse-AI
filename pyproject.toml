@@ -8,16 +8,17 @@ requires-python = ">=3.11"
 testpaths = ["tests"]
 pythonpath = [
     ".",
-    "MarketPulse-AI-Akhtarali446",
-    "marketpluse-ai-M2",
-    "marketpulse-ai",
-    "Marketpulse-LLM"
+    "src",
+    "components/data-layer",
+    "components/forecasting",
+    "components/optimizer",
+    "components/llm"
 ]
 addopts = "-q"
 
 [tool.ruff]
 # Only ever lint the project itself (never the surrounding home directory).
-include = ["marketpulse/**/*.py", "tests/**/*.py", "scripts/**/*.py"]
+include = ["src/marketpulse/**/*.py", "tests/**/*.py", "scripts/**/*.py"]
 line-length = 110
 target-version = "py311"
 

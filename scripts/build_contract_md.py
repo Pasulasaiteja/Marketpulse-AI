@@ -10,9 +10,12 @@ from __future__ import annotations
 import datetime as dt
 import json
 import re
+import sys
 from pathlib import Path
 
-from marketpulse import config
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from marketpulse import config  # noqa: E402
 from marketpulse.contracts.validate import validate_payload
 from marketpulse.mocks.catalogue import sample_catalogue
 from marketpulse.mocks.context import MockContextBuilder

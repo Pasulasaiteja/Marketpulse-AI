@@ -13,7 +13,13 @@ from marketpulse.api.app import create_app
 from marketpulse.contracts.errors import ModuleFailure
 from marketpulse.contracts.models import OptimizerPlan
 from marketpulse.contracts.validate import validate_payload
-from marketpulse.csvloader import CsvError, load_canonical_data
+from marketpulse.csvloader import (
+    CsvError,
+    dump_catalogue_csv,
+    load_canonical_data,
+    load_catalogue_csv,
+)
+from marketpulse.mocks.catalogue import sample_catalogue
 from marketpulse.mocks.fixtures import make_canonical_data
 from marketpulse.registry import default_modules
 
@@ -552,3 +558,27 @@ def test_demo_catalogue_is_synthetic_and_valid():
     for it in d["items"]:
         validate_payload("CatalogueItem", it)
         assert "SYNTHETIC" in it["source"]
+
+
+def test_catalogue_csv_round_trips_through_the_loader():
+    items = sample_catalogue()
+    back = load_catalogue_csv(dump_catalogue_csv(items))
+    assert [c.model_dump(mode="json") for c in back] == [c.model_dump(mode="json") for c in items]
+
+
+def test_opportunities_accept_a_catalogue_csv(data_json):
+    c = client()
+    csv_text = ("item_id,name,category,unit_cost,unit_price,supplier_min_order_qty,sellers_count,"
+                "requests_count,requests_window_days,requests_source,source\n"
+                "Q1,Mango juice,beverages,30,45,6,3,14,28,notebook,test csv\n")
+    body = opp_request(c, confirmed_profile(c), data_json, catalogue_csv=csv_text).json()
+    assert body["catalogue_source"] == "provided_csv"
+    opps = body["opportunities"]["opportunities"]
+    assert [o["name"] for o in opps] == ["Mango juice"]
+    assert opps[0]["demand_basis"] == "observed"  # 14 logged requests make it observed
+
+
+def test_opportunities_bad_catalogue_csv_is_a_clear_422(data_json):
+    c = client()
+    r = opp_request(c, confirmed_profile(c), data_json, catalogue_csv="item_id,name\nX,Widget\n")
+    assert r.status_code == 422 and r.json()["error"]["code"] == "CSV_INVALID"

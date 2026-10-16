@@ -115,3 +115,91 @@ def test_stores_endpoint_errors(client, chain):
 def test_demo_chain_endpoint(client):
     r = client.get("/demo/chain").json()
     assert r["synthetic"] is True and has_store_column(r["sales_csv"])
+
+
+# --------------------------------------------------------------- chain-wide view
+def test_chain_plan_totals_each_store_independently(client, chain):
+    pid = profile(client)
+    reg = register(client, pid, chain)
+    ids = [s["dataset_id"] for s in reg["stores"]]
+    r = client.post("/chain/plan", json={"profile_id": pid, "budget": 5000, "dataset_ids": ids})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "ok" and body["allocation"] == "independent"
+    assert body["currency"] == "INR"
+    assert body["chain"]["stores_planned"] == 3 and body["chain"]["stores_failed"] == 0
+    assert body["failures"] == [] and body["warnings"] == []
+    # every store's share of the chain equals that store's own /plan
+    per = {}
+    for s in body["stores"]:
+        one = client.post("/plan", json={"profile_id": pid, "budget": 5000,
+                                         "dataset_id": s["dataset_id"]}).json()
+        assert s["plan"] == one["plan"]
+        per[s["dataset_id"]] = one["plan"]["total_cost"]
+    assert body["chain"]["total_cost"] == round(sum(per.values()), 2)
+    assert body["chain"]["total_budget"] == 15000.0
+    assert body["chain"]["total_cost"] <= body["chain"]["total_budget"]
+    assert body["chain"]["capital_utilization"] == round(
+        body["chain"]["total_cost"] / body["chain"]["total_budget"], 4)
+
+
+def test_chain_plan_honours_per_store_budgets(client, chain):
+    pid = profile(client)
+    reg = register(client, pid, chain)
+    ids = [s["dataset_id"] for s in reg["stores"]]
+    budgets = {ids[0]: 1000, ids[1]: 2000, ids[2]: 3000}
+    body = client.post("/chain/plan", json={"profile_id": pid, "budget": 5000, "dataset_ids": ids,
+                                            "store_budgets": budgets}).json()
+    assert {s["dataset_id"]: s["budget"] for s in body["stores"]} == budgets
+    assert body["chain"]["total_budget"] == 6000.0
+    for s in body["stores"]:
+        assert s["plan"]["total_cost"] <= budgets[s["dataset_id"]]
+
+
+def test_chain_plan_reports_a_dead_store_and_still_plans_the_rest(client, chain):
+    pid = profile(client)
+    reg = register(client, pid, chain)
+    ids = [s["dataset_id"] for s in reg["stores"]] + ["ds-nope"]
+    body = client.post("/chain/plan", json={"profile_id": pid, "budget": 5000,
+                                            "dataset_ids": ids}).json()
+    assert body["status"] == "ok" and body["chain"]["stores_planned"] == 3
+    assert body["chain"]["stores_failed"] == 1
+    assert [f["code"] for f in body["failures"]] == ["DATASET_NOT_FOUND"]
+    assert "STORE_FAILED" in {w["code"] for w in body["warnings"]}
+
+
+def test_chain_plan_when_no_store_can_be_planned_is_an_honest_error(client, chain):
+    pid = profile(client)
+    r = client.post("/chain/plan", json={"profile_id": pid, "budget": 5000,
+                                         "dataset_ids": ["nope"]})
+    assert r.status_code == 502
+    assert r.json()["error"]["code"] == "MODULE_FAILED"
+
+
+def test_chain_plan_input_validation(client, chain):
+    pid = profile(client)
+    assert client.post("/chain/plan", json={"profile_id": pid, "budget": 5000,
+                                            "dataset_ids": []}).status_code == 422
+    reg = register(client, pid, chain)
+    ids = [s["dataset_id"] for s in reg["stores"]]
+    assert client.post("/chain/plan", json={"profile_id": pid, "budget": 0,
+                                            "dataset_ids": ids}).status_code == 422
+    assert client.post("/chain/plan", json={"profile_id": pid, "budget": 5000,
+                                            "horizon_days": 5, "dataset_ids": ids}).status_code == 422
+    assert client.post("/chain/plan", json={"profile_id": "nope", "budget": 5,
+                                            "dataset_ids": ids}).status_code == 404
+
+
+def test_chain_plan_rejects_mixed_currencies(chain):
+    from marketpulse.audit import AuditLog
+    from marketpulse.registry import mock_modules
+    from marketpulse.service import ApiError, DecisionService
+
+    svc = DecisionService(mock_modules(), AuditLog(None))
+    pid = svc.extract_profile(DESC)["profile"]["profile_id"]
+    svc.confirm_profile(pid, {})
+    svc.datasets["ds-inr"] = chain["store-a"]
+    svc.datasets["ds-usd"] = chain["store-b"].model_copy(update={"currency": "USD"})
+    with pytest.raises(ApiError) as exc:
+        svc.chain_plan({"profile_id": pid, "budget": 1000, "dataset_ids": ["ds-inr", "ds-usd"]})
+    assert exc.value.code == "MIXED_CURRENCY"

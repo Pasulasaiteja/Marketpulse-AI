@@ -5,6 +5,7 @@ __pycache__/
 .venv/
 venv/
 logs/
+reports/
 .system_generated/
 .kilo/
 *.log

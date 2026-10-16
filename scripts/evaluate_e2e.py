@@ -22,8 +22,9 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+for _p in (ROOT / "src", ROOT):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
 
 from fastapi.testclient import TestClient  # noqa: E402
 

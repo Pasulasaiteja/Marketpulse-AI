@@ -16,7 +16,13 @@ import io
 
 from pydantic import ValidationError
 
-from marketpulse.contracts.models import CanonicalData, Product, SalesRecord
+from marketpulse.contracts.models import (
+    CanonicalData,
+    CatalogueItem,
+    Product,
+    RequestStats,
+    SalesRecord,
+)
 
 
 class CsvError(ValueError):
@@ -144,6 +150,70 @@ def dump_stores_csv(stores: dict[str, CanonicalData]) -> tuple[str, str]:
             qw.writerow([sid, r.date.isoformat(), r.product_id, r.units_sold,
                          "" if r.revenue is None else r.revenue, str(r.stockout).lower()])
     return p.getvalue(), q.getvalue()
+
+
+CATALOGUE_COLUMNS = [
+    "item_id", "name", "category", "unit_cost", "unit_price", "supplier_min_order_qty",
+    "supplier_available", "sellers_count", "requests_count", "requests_window_days",
+    "requests_source", "source",
+]
+
+
+def dump_catalogue_csv(items: list[CatalogueItem]) -> str:
+    """CatalogueItem list -> CSV in the format ``load_catalogue_csv`` reads."""
+    out = io.StringIO()
+    w = csv.writer(out, lineterminator="\n")
+    w.writerow(CATALOGUE_COLUMNS)
+    for c in items:
+        r = c.requests
+        w.writerow([c.item_id, c.name, c.category or "", c.unit_cost, c.unit_price,
+                    c.supplier_min_order_qty, str(c.supplier_available).lower(),
+                    "" if c.sellers_count is None else c.sellers_count,
+                    "" if r is None else r.count,
+                    "" if r is None else r.window_days,
+                    "" if r is None else r.source,
+                    c.source])
+    return out.getvalue()
+
+
+def load_catalogue_csv(catalogue_csv: str, *, default_source: str = "provided catalogue CSV"
+                       ) -> list[CatalogueItem]:
+    """Component D catalogue CSV -> CatalogueItem list.
+
+    Required columns: item_id, name, unit_cost, unit_price. Optional: category,
+    supplier_min_order_qty (default 1), supplier_available (true/false, default true),
+    sellers_count (blank = unknown), and the request group requests_count /
+    requests_window_days / requests_source (all three needed for observed demand).
+    """
+    rows = _rows(catalogue_csv, ["item_id", "name", "unit_cost", "unit_price"], "catalogue")
+    out: list[CatalogueItem] = []
+    for n, r in rows:
+        requests = None
+        if r.get("requests_count", "") != "":
+            if r.get("requests_window_days", "") == "":
+                raise CsvError(f"catalogue CSV row {n}: 'requests_window_days' is required with "
+                               "'requests_count'")
+            requests = RequestStats(
+                count=int(_num(r, "requests_count", n, "catalogue")),
+                window_days=int(_num(r, "requests_window_days", n, "catalogue")),
+                source=r.get("requests_source") or default_source)
+        try:
+            out.append(CatalogueItem(
+                item_id=r["item_id"],
+                name=r["name"],
+                category=r.get("category") or None,
+                unit_cost=_num(r, "unit_cost", n, "catalogue"),
+                unit_price=_num(r, "unit_price", n, "catalogue"),
+                supplier_min_order_qty=int(_num(r, "supplier_min_order_qty", n, "catalogue", 1)),
+                supplier_available=r.get("supplier_available", "").lower() not in {"0", "false", "no"},
+                sellers_count=(int(_num(r, "sellers_count", n, "catalogue"))
+                               if r.get("sellers_count") else None),
+                requests=requests,
+                source=r.get("source") or default_source,
+            ))
+        except ValidationError as exc:
+            raise CsvError(f"catalogue CSV row {n}: {exc.errors()[0]['msg']}") from exc
+    return out
 
 
 def has_store_column(sales_csv: str) -> bool:

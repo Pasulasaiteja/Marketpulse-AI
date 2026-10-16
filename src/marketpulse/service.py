@@ -42,7 +42,12 @@ from marketpulse.contracts.models import (
     SignalOutput,
 )
 from marketpulse.contracts.validate import ContractViolation, validate_payload
-from marketpulse.csvloader import CsvError, load_canonical_data, load_canonical_stores
+from marketpulse.csvloader import (
+    CsvError,
+    load_canonical_data,
+    load_canonical_stores,
+    load_catalogue_csv,
+)
 from marketpulse.mocks.catalogue import sample_catalogue
 from marketpulse.normalizers import normalize_country, normalize_currency
 from marketpulse.opportunities.discovery import DiscoveryEngine
@@ -115,6 +120,10 @@ def _dump(model: BaseModel | None) -> Any:
 
 def _hash(obj: Any) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, default=str).encode()).hexdigest()
+
+
+def _r(x: float, nd: int = 2) -> float:
+    return round(x, nd)
 
 
 @dataclass
@@ -406,6 +415,59 @@ class DecisionService:
                         "history_days": len({s.date for s in data.sales}), "as_of": data.as_of.isoformat()})
         return {"status": "ok", "currency": cur, "stores": out}
 
+    # --------------------------------------------------------------- pipeline
+    def _forecast_and_plan(
+        self,
+        trace: Trace,
+        profile: ExtractionProfile,
+        data: CanonicalData,
+        budget: float,
+        horizon: int,
+        constraints: OptimizerConstraints | None,
+    ) -> tuple[OptimizerPlan, ForecastOutput, bool]:
+        """signals -> context -> forecast -> optimize for ONE dataset.
+
+        Soft steps (signals, context) degrade with a warning; the forecast is cached; the optimizer
+        is the hard step. A failure in the forecast or optimize step raises ``StepFailed`` and the
+        caller decides how to report it (single plan vs. one store of a chain).
+        """
+        # Component A signals are optional input: failure degrades honestly, never blocks.
+        signals: SignalOutput | None = None
+        try:
+            signals = self._call(trace, "signals", "SignalOutput",
+                                 self.m.signals.get_signals, data, data.as_of)
+        except StepFailed as exc:
+            trace.warn("SIGNALS_UNAVAILABLE",
+                       f"Market signals unavailable ({exc.error.code}); plan uses sales and context only.")
+
+        # Context: failure falls back to no context features (flagged), never silent.
+        try:
+            context: ContextFeatures = self._call(
+                trace, "context", "ContextFeatures", self.m.context.build_context,
+                profile, data.as_of, horizon, signals)
+        except StepFailed as exc:
+            trace.warn("CONTEXT_FALLBACK",
+                       f"Local context unavailable ({exc.error.code}); forecast uses sales history only.")
+            context = ContextFeatures(as_of=data.as_of, horizon_days=horizon, features=[])
+
+        key = _hash({"d": data.model_dump(mode="json"), "p": profile.fields.model_dump(mode="json"),
+                     "h": horizon, "s": [s.signal_id for s in signals.signals] if signals else []})
+        cached = self.forecast_cache.get(key)
+        if cached is not None:
+            forecast, hit = cached, True
+            trace.steps.append({"module": "forecaster", "status": "cached", "ms": 0.0, "error": None})
+        else:
+            forecast = self._call(trace, "forecaster", "ForecastOutput",
+                                  self.m.forecaster.forecast, data, profile, context, horizon,
+                                  signals)
+            with self._lock:
+                self.forecast_cache[key] = forecast
+            hit = False
+        plan: OptimizerPlan = self._call(trace, "optimizer", "OptimizerPlan",
+                                         self.m.optimizer.optimize, forecast, data, budget,
+                                         constraints)
+        return plan, forecast, hit
+
     def plan(self, req: dict[str, Any]) -> dict[str, Any]:
         trace = Trace(uuid.uuid4().hex[:12])
         budget, horizon = _parse_budget_and_horizon(req)
@@ -438,43 +500,9 @@ class DecisionService:
             trace.warn("CURRENCY_MISMATCH",
                        f"Profile currency {cur} differs from data currency {data.currency}.")
 
-        # Component A signals are optional input: failure degrades honestly, never blocks.
-        signals: SignalOutput | None = None
         try:
-            signals = self._call(trace, "signals", "SignalOutput",
-                                 self.m.signals.get_signals, data, data.as_of)
-        except StepFailed as exc:
-            trace.warn("SIGNALS_UNAVAILABLE",
-                       f"Market signals unavailable ({exc.error.code}); plan uses sales and context only.")
-
-        # Context: failure falls back to no context features (flagged), never silent.
-        try:
-            context: ContextFeatures = self._call(
-                trace, "context", "ContextFeatures", self.m.context.build_context,
-                profile, data.as_of, horizon, signals)
-        except StepFailed as exc:
-            trace.warn("CONTEXT_FALLBACK",
-                       f"Local context unavailable ({exc.error.code}); forecast uses sales history only.")
-            context = ContextFeatures(as_of=data.as_of, horizon_days=horizon, features=[])
-
-        key = _hash({"d": data.model_dump(mode="json"), "p": profile.fields.model_dump(mode="json"),
-                     "h": horizon, "s": [s.signal_id for s in signals.signals] if signals else []})
-        cached = self.forecast_cache.get(key)
-        try:
-            if cached is not None:
-                forecast, hit = cached, True
-                trace.steps.append({"module": "forecaster", "status": "cached", "ms": 0.0,
-                                    "error": None})
-            else:
-                forecast = self._call(trace, "forecaster", "ForecastOutput",
-                                      self.m.forecaster.forecast, data, profile, context, horizon,
-                                      signals)
-                with self._lock:
-                    self.forecast_cache[key] = forecast
-                hit = False
-            plan: OptimizerPlan = self._call(trace, "optimizer", "OptimizerPlan",
-                                             self.m.optimizer.optimize, forecast, data, budget,
-                                             constraints)
+            plan, forecast, hit = self._forecast_and_plan(
+                trace, profile, data, budget, horizon, constraints)
         except StepFailed as exc:
             raise self._fail(trace, "/plan", exc) from exc
 
@@ -503,6 +531,163 @@ class DecisionService:
             "timings_ms": timings,
             "cache": {"forecast_hit": hit},
             "latency": {"target_seconds": target, "within_target": timings["total"] <= target * 1000},
+        }
+
+    # --------------------------------------------------------------- /chain/plan
+    def chain_plan(self, req: dict[str, Any]) -> dict[str, Any]:
+        """Chain-wide view across several stores: run each store's plan independently, then total.
+
+        This is an AGGREGATE, not a chain optimum. Every store keeps its own budget and the
+        optimizer never moves money between stores (README "Multi-Store Scope"). ``budget`` is the
+        default per-store budget; ``store_budgets`` overrides it for individual datasets. A store
+        that fails is reported in ``failures`` and the rest still plan (honest partial result); if
+        no store can be planned the call fails like a single /plan would.
+        """
+        trace = Trace(uuid.uuid4().hex[:12])
+        budget, horizon = _parse_budget_and_horizon(req)
+
+        with self._lock:
+            profile = self.profiles.get(req["profile_id"])
+        if profile is None:
+            raise ApiError(404, "PROFILE_NOT_FOUND", f"No profile {req['profile_id']!r}.")
+        language = req.get("language") or (
+            profile.language if profile.language in config.SUPPORTED_LANGUAGES else "en")
+        if language not in config.SUPPORTED_LANGUAGES:
+            raise ApiError(422, "UNSUPPORTED_LANGUAGE",
+                           f"Supported languages: {', '.join(config.SUPPORTED_LANGUAGES)}")
+
+        follow = compute_followups(profile) if profile.status != "confirmed" else [
+            f for f in compute_followups(profile) if f.reason == "missing"]
+        if profile.status != "confirmed" or follow:
+            self.audit.write(trace.request_id, "/chain/plan", outcome="needs_confirmation",
+                             profile_id=profile.profile_id, follow_ups=[f.field for f in follow])
+            return {"status": "needs_confirmation", "request_id": trace.request_id,
+                    "profile": _dump(profile), "follow_up_questions": [_dump(f) for f in follow],
+                    "message": "Confirm or correct your shop details before a plan is made."}
+
+        dataset_ids = list(dict.fromkeys(req.get("dataset_ids") or []))
+        if not dataset_ids:
+            raise ApiError(422, "STORES_REQUIRED",
+                           "Provide dataset_ids (from /stores) to view a chain.")
+        store_budgets = req.get("store_budgets") or {}
+        constraints = req.get("constraints")
+        if constraints is not None and not isinstance(constraints, OptimizerConstraints):
+            constraints = OptimizerConstraints.model_validate(constraints)
+
+        stores_out: list[dict[str, Any]] = []
+        failures: list[dict[str, Any]] = []
+        currencies: set[str] = set()
+        total_cost = total_profit = total_budget = 0.0
+        lo_sum: float | None = 0.0
+        hi_sum: float | None = 0.0
+        for ds_id in dataset_ids:
+            with self._lock:
+                data = self.datasets.get(ds_id)
+            if data is None:
+                failures.append({"dataset_id": ds_id, "store_id": None, "module": "optimizer",
+                                 "code": "DATASET_NOT_FOUND", "message": f"No dataset {ds_id!r}."})
+                trace.warn("STORE_FAILED", f"No dataset {ds_id!r}; store skipped.")
+                continue
+            currencies.add(data.currency)
+            try:
+                sb = float(store_budgets.get(ds_id, budget))
+            except (TypeError, ValueError):
+                sb = float("nan")
+            if not math.isfinite(sb) or sb <= 0:
+                failures.append({"dataset_id": ds_id, "store_id": data.shop_id, "module": "optimizer",
+                                 "code": "INVALID_BUDGET", "message": "Store budget must be > 0."})
+                trace.warn("STORE_FAILED", f"Store {data.shop_id}: budget must be > 0; store skipped.")
+                continue
+
+            sub = Trace(uuid.uuid4().hex[:12])
+            try:
+                plan, forecast, hit = self._forecast_and_plan(
+                    sub, profile, data, sb, horizon, constraints)
+            except StepFailed as exc:
+                trace.steps.extend(sub.steps)
+                failures.append({"dataset_id": ds_id, "store_id": data.shop_id,
+                                 "module": exc.error.module, "code": exc.error.code,
+                                 "message": exc.error.message})
+                trace.warn("STORE_FAILED",
+                           f"Store {data.shop_id} could not be planned ({exc.error.code}).")
+                continue
+            explanation = self._explain(sub, plan, forecast, None, language)
+            trace.steps.extend(sub.steps)
+            with self._lock:
+                self.results[sub.request_id] = StoredResult(plan, forecast, language)
+            stores_out.append({
+                "store_id": data.shop_id,
+                "dataset_id": ds_id,
+                "request_id": sub.request_id,
+                "budget": _r(sb),
+                "product_names": {x.product_id: x.name for x in data.products},
+                "plan": _dump(plan),
+                "forecast": _dump(forecast),
+                "explanation": _dump(explanation),
+                "warnings": sub.warnings,
+                "timings_ms": sub.timings(),
+                "cache": {"forecast_hit": hit},
+            })
+            total_cost += plan.total_cost
+            total_profit += plan.expected_total_profit
+            total_budget += sb
+            if plan.expected_profit_interval is None:
+                lo_sum = hi_sum = None
+            elif lo_sum is not None and hi_sum is not None:
+                lo_sum += plan.expected_profit_interval.low
+                hi_sum += plan.expected_profit_interval.high
+
+        if len(currencies) > 1:
+            raise ApiError(422, "MIXED_CURRENCY",
+                           "All stores in a chain view must share one currency; got "
+                           + ", ".join(sorted(currencies)) + ".")
+        if not stores_out:
+            if failures:
+                first = failures[0]
+                err = ModuleError(module=first["module"], code=first["code"],
+                                  message=first["message"])
+                self.audit.write(trace.request_id, "/chain/plan", outcome="error",
+                                 profile_id=profile.profile_id, dataset_ids=dataset_ids,
+                                 steps=trace.steps, error=_dump(err))
+                raise ApiError(502, "MODULE_FAILED",
+                               f"No store could be planned ({first['code']}).", err)
+            raise ApiError(422, "STORES_REQUIRED", "No stores to plan.")
+
+        currency = next(iter(currencies))
+        interval = None
+        if lo_sum is not None and hi_sum is not None:
+            interval = {"low": _r(lo_sum), "high": _r(hi_sum)}
+        chain = {
+            "stores_planned": len(stores_out),
+            "stores_failed": len(failures),
+            "allocation": "independent",
+            "currency": currency,
+            "horizon_days": horizon,
+            "total_budget": _r(total_budget),
+            "total_cost": _r(total_cost),
+            "capital_utilization": _r(total_cost / total_budget if total_budget > 0 else 0.0, 4),
+            "expected_total_profit": _r(total_profit),
+            "expected_profit_interval": interval,
+        }
+        timings = trace.timings()
+        self.audit.write(trace.request_id, "/chain/plan", outcome="ok",
+                         profile_id=profile.profile_id, horizon_days=horizon,
+                         dataset_ids=dataset_ids, stores_planned=chain["stores_planned"],
+                         stores_failed=chain["stores_failed"], total_cost=chain["total_cost"],
+                         total_budget=chain["total_budget"], steps=trace.steps,
+                         warnings=trace.warnings)
+        return {
+            "status": "ok",
+            "request_id": trace.request_id,
+            "profile_id": profile.profile_id,
+            "currency": currency,
+            "horizon_days": horizon,
+            "allocation": chain["allocation"],
+            "chain": chain,
+            "stores": stores_out,
+            "failures": failures,
+            "warnings": trace.warnings,
+            "timings_ms": timings,
         }
 
     def _explain(self, trace: Trace, plan: OptimizerPlan, forecast: ForecastOutput,
@@ -562,7 +747,12 @@ class DecisionService:
 
         catalogue = req.get("catalogue")
         source = "provided"
-        if catalogue is None:
+        if catalogue is None and req.get("catalogue_csv"):
+            try:
+                catalogue, source = load_catalogue_csv(req["catalogue_csv"]), "provided_csv"
+            except CsvError as exc:
+                raise ApiError(422, "CSV_INVALID", str(exc)) from exc
+        elif catalogue is None:
             catalogue, source = sample_catalogue(), "sample_synthetic"
 
         signals: SignalOutput | None = None

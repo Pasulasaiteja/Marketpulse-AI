@@ -1,10 +1,10 @@
 """
 Live Data Adapter & Loader for MarketPulse AI (Member 2).
 Loads and aligns real upstream datasets produced by Member 1:
-- data/full_ml_feature_matrix.csv (73,000 observations across 10 stores and 20 products)
-- data/items_catalog.csv (Product categories, margins, supplier constraints)
-- data/stores_metadata.csv (Store locations, population densities, regional taxonomy)
-- data/cold_start_priors.csv (Bayesian cluster priors for cold-start and sparse forecasting)
+- data/processed/full_ml_feature_matrix.csv (73,000 observations across 10 stores and 20 products)
+- data/processed/items_catalog.csv (Product categories, margins, supplier constraints)
+- data/processed/stores_metadata.csv (Store locations, population densities, regional taxonomy)
+- data/processed/cold_start_priors.csv (Bayesian cluster priors for cold-start and sparse forecasting)
 
 Automatically maps schemas to match CONTRACT.md while retaining full backwards
 compatibility with synthetic mock generators.
@@ -23,23 +23,29 @@ _LOADED_DATASET_CACHE: dict[str, Any] | None = None
 def get_data_dir() -> Path:
     """
     Locates the directory containing Member 1 CSV datasets.
-    Searches 'data/' relative to project root or current working directory.
+    Searches the shared repository data/ directory first, then 'data/' relative to
+    the component root or the current working directory.
     """
-    # 1. Project root / data
-    root_candidate = Path(__file__).resolve().parent.parent / "data"
-    if root_candidate.is_dir() and (root_candidate / "full_ml_feature_matrix.csv").exists():
-        return root_candidate
+    here = Path(__file__).resolve()
+    candidates = [
+        # 1. Shared repository dataset directory (repo_root/data/processed)
+        here.parents[3] / "data" / "processed",
+        # 2. Shared repository dataset directory (repo_root/data)
+        here.parents[3] / "data",
+        # 3. Component root / data
+        here.parent.parent / "data",
+        # 4. Current working directory / data
+        Path.cwd() / "data",
+    ]
+    for candidate in candidates:
+        if (candidate / "full_ml_feature_matrix.csv").exists():
+            return candidate
 
-    # 2. Current working directory / data
-    cwd_candidate = Path.cwd() / "data"
-    if cwd_candidate.is_dir() and (cwd_candidate / "full_ml_feature_matrix.csv").exists():
-        return cwd_candidate
-
-    # 3. Direct working directory
+    # 5. Direct working directory
     if (Path.cwd() / "full_ml_feature_matrix.csv").exists():
         return Path.cwd()
 
-    return root_candidate
+    return candidates[0]
 
 
 def has_live_dataset(data_dir: Path | str | None = None) -> bool:

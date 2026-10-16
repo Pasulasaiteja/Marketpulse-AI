@@ -180,11 +180,11 @@ The demoable core is **B + C + E** (forecast with intervals, budget-constrained 
 
 | Component | Repository Folder | Core Responsibility & Technologies | Integration Adapter |
 |---|---|---|---|
-| **Member 1: Data Layer & Context** | `MarketPulse-AI-Akhtarali446/` | Catalog processing, continuous date reindexing, real store sales extraction (`STORE_001`–`STORE_010`), regional context engine (calendar, paydays, economic indicators). | `marketpulse/adapters/data_layer.py`, `TeamContextBuilder` |
-| **Member 2: Demand Forecasting & Signals** | `marketpluse-ai-M2/` | Statistical signal pipeline (change point spikes, trend shifts), multi-model quantile forecasting (LightGBM, Hierarchical Sparse Pooling, Seasonal-Naive, Moving Average). | `TeamForecaster`, `TeamSignalProvider` |
-| **Member 3: Inventory Optimization** | `marketpulse-ai/` | Newsvendor quantile optimization, integer budget allocation, minimum order quantities (MOQ), pack sizes, shelf-life caps, budget sensitivity analysis. | `TeamOptimizer` |
-| **Member 4: LLM Layer & Explanations** | `Marketpulse-LLM/` | OpenAI-compatible AMD LLM client, multilingual profile extractor with Karachi gazetteer, RFC 6901 number guard, grounded natural language decision explanations. | `TeamExtractor`, `TeamExplainer` |
-| **Member 5: Orchestration, API & UI** | `marketpulse/` | Contract boundary validation (`validate_payload`), structured audit log (`logs/audit.jsonl`), FastAPI endpoints (`/profile/*`, `/plan`, `/ask`, `/stores`, `/opportunities`), zero-build responsive retailer interface (`marketpulse/ui`). | `marketpulse/service.py`, `marketpulse/api/app.py` |
+| **Member 1: Data Layer & Context** | `components/data-layer/` | Catalog processing, continuous date reindexing, real store sales extraction (`STORE_001`–`STORE_010`), regional context engine (calendar, paydays, economic indicators). | `src/marketpulse/adapters/data_layer.py`, `TeamContextBuilder` |
+| **Member 2: Demand Forecasting & Signals** | `components/forecasting/` | Statistical signal pipeline (change point spikes, trend shifts), multi-model quantile forecasting (LightGBM, Hierarchical Sparse Pooling, Seasonal-Naive, Moving Average). | `TeamForecaster`, `TeamSignalProvider` |
+| **Member 3: Inventory Optimization** | `components/optimizer/` | Newsvendor quantile optimization, integer budget allocation, minimum order quantities (MOQ), pack sizes, shelf-life caps, budget sensitivity analysis. | `TeamOptimizer` |
+| **Member 4: LLM Layer & Explanations** | `components/llm/` | OpenAI-compatible AMD LLM client, multilingual profile extractor with Karachi gazetteer, RFC 6901 number guard, grounded natural language decision explanations. | `TeamExtractor`, `TeamExplainer` |
+| **Member 5: Orchestration, API & UI** | `src/marketpulse/` | Contract boundary validation (`validate_payload`), structured audit log (`logs/audit.jsonl`), FastAPI endpoints (`/profile/*`, `/plan`, `/ask`, `/stores`, `/opportunities`), zero-build responsive retailer interface (`src/marketpulse/ui`). | `src/marketpulse/service.py`, `src/marketpulse/api/app.py` |
 
 ---
 
@@ -197,7 +197,7 @@ The demoable core is **B + C + E** (forecast with intervals, budget-constrained 
 ### 2. Environment Setup
 ```bash
 # Clone and enter the workspace
-cd marketpulse-ai
+cd Marketpulse-AI
 
 # Create and activate a virtual environment
 python -m venv .venv
@@ -243,7 +243,7 @@ MARKETPULSE_USE_MOCKS=false
 ### 1. Launch the Decision API & Retailer UI
 Start the FastAPI server:
 ```bash
-uvicorn marketpulse.api.app:app --host 0.0.0.0 --port 8000 --reload
+uvicorn --app-dir src marketpulse.api.app:app --host 0.0.0.0 --port 8000 --reload
 ```
 Once started, access:
 - **Retailer Web Interface:** [http://localhost:8000/ui](http://localhost:8000/ui) (or [http://localhost:8000/](http://localhost:8000/))
@@ -253,7 +253,7 @@ Once started, access:
 ### 2. Run End-to-End Evaluation on Real Retailer Data
 Execute the evaluation harness across real multi-store processed datasets from Member 1:
 ```bash
-python scripts/evaluate_e2e.py MarketPulse-AI-Akhtarali446 --stores 3 --out reports/e2e_metrics.json
+python scripts/evaluate_e2e.py . --stores 3 --out reports/e2e_metrics.json
 ```
 
 ---
@@ -265,10 +265,10 @@ All individual component test suites and the root integrated system test suite h
 | Test Suite | Path | Tests Passed | Duration | Status |
 |---|---|---|---|---|
 | **Root System & Integration** | `tests/` | **154 passed** (2 skipped) | 200s | **PASS** |
-| **Member 1 (Data Layer & Context)** | `MarketPulse-AI-Akhtarali446/tests/` | **14 passed** | 191s | **PASS** |
-| **Member 2 (Forecasting & Signals)** | `marketpluse-ai-M2/tests/` | **20 passed** | 63s | **PASS** |
-| **Member 3 (Optimizer)** | `marketpulse-ai/tests/` | **23 passed** | 16s | **PASS** |
-| **Member 4 (LLM Layer)** | `Marketpulse-LLM/tests/` | **121 passed** | 1.1s | **PASS** |
+| **Member 1 (Data Layer & Context)** | `components/data-layer/tests/` | **14 passed** | 191s | **PASS** |
+| **Member 2 (Forecasting & Signals)** | `components/forecasting/tests/` | **20 passed** | 63s | **PASS** |
+| **Member 3 (Optimizer)** | `components/optimizer/tests/` | **23 passed** | 16s | **PASS** |
+| **Member 4 (LLM Layer)** | `components/llm/tests/` | **121 passed** | 1.1s | **PASS** |
 | **Total** | | **332 passed** | | **100% PASS** |
 
 ### Commands to Run Tests
@@ -277,16 +277,16 @@ All individual component test suites and the root integrated system test suite h
 python -m pytest tests
 
 # Run Member 1 tests
-cd MarketPulse-AI-Akhtarali446 && python -m pytest tests && cd ..
+cd components/data-layer && python -m pytest tests && cd ../..
 
 # Run Member 2 tests
-cd marketpluse-ai-M2 && python -m pytest tests && cd ..
+cd components/forecasting && python -m pytest tests && cd ../..
 
 # Run Member 3 tests
-cd marketpulse-ai && python -m pytest tests && cd ..
+cd components/optimizer && python -m pytest tests && cd ../..
 
 # Run Member 4 tests
-python -m pytest Marketpulse-LLM/tests
+python -m pytest components/llm/tests
 ```
 
 ---

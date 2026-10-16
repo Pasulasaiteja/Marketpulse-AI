@@ -43,14 +43,14 @@ from marketpulse.normalizers import (
     normalize_currency,
 )
 
-_ROOT = Path(__file__).resolve().parents[2]
+_ROOT = Path(__file__).resolve().parents[3]
 _COMPONENT_DIRS = {
-    "forecasting": "marketpluse-ai-M2",
-    "market_signals": "marketpluse-ai-M2",
-    "optimizer": "marketpulse-ai",
-    "llm": "Marketpulse-LLM",
-    "data": "MarketPulse-AI-Akhtarali446",
-    "src": "MarketPulse-AI-Akhtarali446",
+    "forecasting": "components/forecasting",
+    "market_signals": "components/forecasting",
+    "optimizer": "components/optimizer",
+    "llm": "components/llm",
+    "data": "components/data-layer",
+    "src": "components/data-layer",
 }
 
 
@@ -68,7 +68,7 @@ def _load_component(package: str) -> Any:
         }[package]
         raise ModuleFailure(
             module, "COMPONENT_NOT_FOUND",
-            f"Required component folder {folder!r} is missing beside the integration project.",
+            f"Required component folder {folder!r} is missing under components/.",
         )
     component_path = str(component_root)
     if component_path not in sys.path:
@@ -93,11 +93,21 @@ class TeamExtractor:
     """Maps Member 4's extraction schema to the integration profile contract."""
 
     _COUNTRIES = (
-        (re.compile(r"(?:\bindia\b|\bbharat\b|भारत|\bhindustan\b|ہندوستان|\bdelhi\b|\bmumbai\b)", re.IGNORECASE), "IN"),
+        (re.compile(
+            r"(?:\bindia\b|\bbharat\b|भारत|\bhindustan\b|ہندوستان|\bdelhi\b|\bmumbai\b)",
+            re.IGNORECASE,
+        ), "IN"),
         (re.compile(r"(?:\bpakistan\b|پاکستان|\bkarachi\b|\blahore\b)", re.IGNORECASE), "PK"),
         (re.compile(r"(?:\becuador\b|\bquito\b)", re.IGNORECASE), "EC"),
-        (re.compile(r"(?:\bunited states\b|\busa\b|\bamerica\b|\bnew york\b|\blos angeles\b|\bchicago\b)", re.IGNORECASE), "US"),
-        (re.compile(r"(?:\bunited kingdom\b|\buk\b|\bgreat britain\b|\bbritain\b|\bengland\b|\blondon\b|\bmanchester\b)", re.IGNORECASE), "GB"),
+        (re.compile(
+            r"(?:\bunited states\b|\busa\b|\bamerica\b|\bnew york\b|\blos angeles\b|\bchicago\b)",
+            re.IGNORECASE,
+        ), "US"),
+        (re.compile(
+            r"(?:\bunited kingdom\b|\buk\b|\bgreat britain\b|\bbritain\b|\bengland\b|"
+            r"\blondon\b|\bmanchester\b)",
+            re.IGNORECASE,
+        ), "GB"),
         (re.compile(r"(?:\bfrance\b|\bparis\b|\blyon\b|\bmarseille\b)", re.IGNORECASE), "FR"),
         (re.compile(r"(?:\bspain\b|\bespaña\b|\bespana\b|\bmadrid\b|\bbarcelona\b)", re.IGNORECASE), "ES"),
         (re.compile(r"(?:\bgermany\b|\bdeutschland\b|\bberlin\b|\bmunich\b)", re.IGNORECASE), "DE"),
@@ -114,7 +124,10 @@ class TeamExtractor:
         (re.compile(r"(?:\bsaudi arabia\b|\briyadh\b|\bjeddah\b)", re.IGNORECASE), "SA"),
         (re.compile(r"(?:\bsingapore\b)", re.IGNORECASE), "SG"),
         (re.compile(r"(?:\bswitzerland\b|\bzurich\b|\bgeneva\b)", re.IGNORECASE), "CH"),
-        (re.compile(r"(?:\bcameroon\b|\bcameroun\b|\bdouala\b|\byaoundé\b|\byaounde\b)", re.IGNORECASE), "CM"),
+        (re.compile(
+            r"(?:\bcameroon\b|\bcameroun\b|\bdouala\b|\byaoundé\b|\byaounde\b)",
+            re.IGNORECASE,
+        ), "CM"),
     )
     _CURRENCIES = (
         (re.compile(r"(?:\bUSD\b|\$|\bdollar(?:s)?\b|\bus dollar(?:s)?\b)", re.IGNORECASE), "USD"),

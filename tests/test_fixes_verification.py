@@ -423,7 +423,8 @@ def test_team_extractor_multi_currency():
     assert p_us.fields.currency.value == "USD"
 
     # UK Shop with GBP
-    p_uk = extractor.extract_profile("Retail grocery in London near a bus station, budget 4000 GBP, payday 28th")
+    p_uk = extractor.extract_profile(
+        "Retail grocery in London near a bus station, budget 4000 GBP, payday 28th")
     assert p_uk.fields.country.value == "GB"
     assert p_uk.fields.currency.value == "GBP"
 

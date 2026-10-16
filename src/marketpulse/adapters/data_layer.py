@@ -1,4 +1,4 @@
-"""Member 1 data layer (Akhtarali446/MarketPulse-AI) -> CanonicalData for ONE store.
+"""Member 1 data layer (components/data-layer) -> CanonicalData for ONE store.
 
 Their tables: items(item_id, category_id, cost_price, selling_price[, supplier_id, lead_time_days]),
 sales(date, store_id, item_id, sales_quantity, price, on_promotion[, is_stockout, ...]) and

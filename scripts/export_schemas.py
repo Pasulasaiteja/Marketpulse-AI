@@ -7,11 +7,14 @@ A test (tests/test_contracts.py) fails if the committed files are out of date.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
-from marketpulse.contracts.models import CONTRACT_MODELS
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-OUT = Path(__file__).resolve().parents[1] / "marketpulse" / "contracts" / "schemas"
+from marketpulse.contracts.models import CONTRACT_MODELS  # noqa: E402
+
+OUT = Path(__file__).resolve().parents[1] / "src" / "marketpulse" / "contracts" / "schemas"
 
 
 def render(name: str) -> str:
