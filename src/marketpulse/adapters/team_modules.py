@@ -254,6 +254,7 @@ class TeamExtractor:
                 text_currency = code
                 break
 
+        curr_conf: float | None = None
         if text_currency:
             currency_val = text_currency
             curr_conf = 0.95
@@ -265,6 +266,7 @@ class TeamExtractor:
             curr_conf = fields.get("currency").confidence
         else:
             currency_val = None
+            curr_conf = 0.0
 
         if country is None and currency_val:
             if currency_val in CURRENCY_TO_COUNTRY:
