@@ -71,7 +71,7 @@ PLAN_LATENCY_WARM_SECONDS = _assume(
     "PLAN_LATENCY_WARM_SECONDS", 3.0, "/plan with cached forecasts. Chosen by project owner."
 )
 PLAN_LATENCY_COLD_SECONDS = _assume(
-    "PLAN_LATENCY_COLD_SECONDS", 10.0, "/plan with no cache. Chosen by project owner."
+    "PLAN_LATENCY_COLD_SECONDS", 15.0, "/plan with no cache. Chosen by project owner."
 )
 
 # --- Opportunity Discovery (Component D) -----------------------------------
