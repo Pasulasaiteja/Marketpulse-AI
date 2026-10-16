@@ -516,10 +516,13 @@ function renderPlan(first = false) {
 
   // sensitivity
   const tb = $("#sens-table tbody");
-  tb.replaceChildren(...p.budget_sensitivity.map((b, j) => el("tr", {},
-    el("td", {}, num(b.budget, "money", "/budget_sensitivity/" + j + "/budget")),
-    el("td", {}, num(b.total_cost, "money", "/budget_sensitivity/" + j + "/total_cost")),
-    el("td", {}, num(b.expected_total_profit, "money", "/budget_sensitivity/" + j + "/expected_total_profit")))));
+  tb.replaceChildren(...p.budget_sensitivity.map((b, j) => {
+    const isCurrent = Math.abs(b.budget - p.budget) < 1;
+    return el("tr", { class: isCurrent ? "active-budget-row" : null },
+      el("td", {}, num(b.budget, "money", "/budget_sensitivity/" + j + "/budget")),
+      el("td", {}, num(b.total_cost, "money", "/budget_sensitivity/" + j + "/total_cost")),
+      el("td", {}, num(b.expected_total_profit, "money", "/budget_sensitivity/" + j + "/expected_total_profit")));
+  }));
 
   $("#timing").textContent = t("ready_in") + " " + Math.round(r.timings_ms.total) + " " + t("ms") +
     (r.cache && r.cache.forecast_hit ? " (" + t("cached") + ")" : "");
@@ -747,6 +750,48 @@ function init() {
     if (v > 0) $("#budget-range").value = String(v);
     scheduleBudgetRun(ev.target.value);
   });
+  $$(".preset-chip").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = Number(btn.dataset.preset);
+      if (val > 0) {
+        $("#budget").value = String(val);
+        $$(".preset-chip").forEach((b) => b.classList.toggle("active", b === btn));
+      }
+    });
+  });
+  $$(".btn-nudge").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const delta = Number(btn.dataset.nudge);
+      const cur = Number($("#budget-num").value) || state.budget || 5000;
+      const next = Math.max(100, cur + delta);
+      $("#budget-num").value = String(next);
+      if (next > Number($("#budget-range").max)) $("#budget-range").max = String(next);
+      $("#budget-range").value = String(next);
+      scheduleBudgetRun(next);
+    });
+  });
+  const btnCopy = $("#btn-copy-plan");
+  if (btnCopy) {
+    btnCopy.addEventListener("click", async () => {
+      if (!state.resp || !state.resp.plan) return;
+      const p = state.resp.plan;
+      const summaryText = `MarketPulse Plan:
+Budget: ${fmt.money(p.budget)} ${p.currency}
+Planned Spend: ${fmt.money(p.total_cost)} ${p.currency}
+Expected Profit: ${fmt.money(p.expected_total_profit)} ${p.currency}
+Items to buy: ${p.lines.filter((l) => l.order_qty > 0).length}
+Generated via MarketPulse AI (AMD Developer Hackathon)`;
+      try {
+        await navigator.clipboard.writeText(summaryText);
+        const lbl = $("#copy-plan-text");
+        if (lbl) {
+          const orig = lbl.textContent;
+          lbl.textContent = t("copy_plan_done");
+          setTimeout(() => { lbl.textContent = orig; }, 1800);
+        }
+      } catch (_) { /* fallback if clipboard permissions denied */ }
+    });
+  }
   $("#form-chat").addEventListener("submit", (ev) => {
     ev.preventDefault();
     const q = $("#chat-input").value;

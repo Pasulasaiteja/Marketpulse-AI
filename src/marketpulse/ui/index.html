@@ -18,6 +18,14 @@
     </svg>
 
     <div class="container hero-inner">
+      <div class="hackathon-ribbon">
+        <div class="hackathon-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          <span class="badge-text" data-i18n="hackathon_track">AMD Developer Hackathon · Reinvent Commerce</span>
+          <span class="badge-tag" data-i18n="hackathon_tag">⚡ AMD Instinct™ Optimized</span>
+        </div>
+      </div>
+
       <div class="hero-top">
         <span class="brand">
           <span class="brand-mark" aria-hidden="true">
@@ -26,7 +34,10 @@
               <path d="M3 15.5 7 9l3 4 2.5-7.5L16 16l2-4 3 1.5"/>
             </svg>
           </span>
-          <span class="brand-name" data-i18n="app_title">MarketPulse</span>
+          <span class="brand-text-col">
+            <span class="brand-name" data-i18n="app_title">MarketPulse</span>
+            <span class="brand-subtitle" data-i18n="app_subtitle">Autonomous Retail Inventory & Commercial Engine</span>
+          </span>
         </span>
 
         <label class="lang">
@@ -48,9 +59,9 @@
       </div>
 
       <ol class="steps" id="steps" aria-label="Progress">
-        <li data-step="describe"><span class="dot" aria-hidden="true"></span><span data-i18n="step_describe">Describe</span></li>
-        <li data-step="confirm"><span class="dot" aria-hidden="true"></span><span data-i18n="step_confirm">Confirm</span></li>
-        <li data-step="plan"><span class="dot" aria-hidden="true"></span><span data-i18n="step_plan">Plan</span></li>
+        <li data-step="describe"><span class="step-num">1</span><span class="dot" aria-hidden="true"></span><span data-i18n="step_describe">Describe</span></li>
+        <li data-step="confirm"><span class="step-num">2</span><span class="dot" aria-hidden="true"></span><span data-i18n="step_confirm">Confirm</span></li>
+        <li data-step="plan"><span class="step-num">3</span><span class="dot" aria-hidden="true"></span><span data-i18n="step_plan">Plan</span></li>
       </ol>
     </div>
   </header>
@@ -62,14 +73,20 @@
       <!-- 1. describe -->
       <section id="screen-describe" data-screen="describe" class="screen card" aria-labelledby="h-describe">
         <div class="card-body">
+          <div class="screen-badge" data-i18n="step_badge_describe">Step 1 · Shop Profiler</div>
           <h2 id="h-describe" class="screen-title" tabindex="-1" data-i18n="describe_title">Tell us about your shop</h2>
           <p class="hint" data-i18n="describe_hint"></p>
 
           <form id="form-describe" novalidate>
             <div class="field">
-              <label class="form-label" for="description"><span data-i18n="description_label">Shop description</span></label>
+              <div class="field-header">
+                <label class="form-label" for="description"><span data-i18n="description_label">Shop description</span></label>
+                <button type="button" class="btn-example-chip" id="btn-example">
+                  <span class="sparkle" aria-hidden="true">✨</span>
+                  <span data-i18n="try_example">Use an example</span>
+                </button>
+              </div>
               <textarea id="description" class="form-control" rows="4" data-i18n-ph="description_ph"></textarea>
-              <button type="button" class="link" id="btn-example" data-i18n="try_example">Use an example</button>
             </div>
 
             <fieldset class="field">
@@ -94,9 +111,21 @@
                   </span>
                 </label>
               </div>
-              <div class="quick">
-                <button type="button" class="link" id="btn-demo" data-i18n="use_demo">Use sample shop data</button>
-                <button type="button" class="link" id="btn-demo-chain" data-i18n="use_demo_chain">Use sample data for 3 stores</button>
+              <div class="quick demo-cards-grid">
+                <button type="button" class="demo-card-btn" id="btn-demo">
+                  <span class="demo-card-ico" aria-hidden="true">🏪</span>
+                  <span class="demo-card-text">
+                    <strong data-i18n="demo_single_title">Sample Bodega</strong>
+                    <small data-i18n="use_demo">Use sample shop data</small>
+                  </span>
+                </button>
+                <button type="button" class="demo-card-btn" id="btn-demo-chain">
+                  <span class="demo-card-ico" aria-hidden="true">🏬</span>
+                  <span class="demo-card-text">
+                    <strong data-i18n="demo_chain_title">3-Store Retail Chain</strong>
+                    <small data-i18n="use_demo_chain">Use sample data for 3 stores</small>
+                  </span>
+                </button>
               </div>
               <p class="status" id="data-status" aria-live="polite"></p>
             </fieldset>
@@ -105,6 +134,13 @@
               <div class="field grow">
                 <label class="form-label" for="budget"><span data-i18n="budget_label">Budget</span></label>
                 <input id="budget" class="form-control" type="number" inputmode="decimal" min="1" step="any" value="5000">
+                <div class="budget-presets" role="group" aria-label="Budget presets">
+                  <span class="preset-label" data-i18n="budget_quick_label">Quick Presets:</span>
+                  <button type="button" class="preset-chip" data-preset="1000">$1,000</button>
+                  <button type="button" class="preset-chip" data-preset="3000">$3,000</button>
+                  <button type="button" class="preset-chip" data-preset="5000">$5,000</button>
+                  <button type="button" class="preset-chip" data-preset="10000">$10,000</button>
+                </div>
               </div>
               <div class="field">
                 <label class="form-label" for="horizon"><span data-i18n="horizon_label">Plan for</span></label>
@@ -124,6 +160,7 @@
       <!-- 2. confirm -->
       <section id="screen-confirm" data-screen="confirm" class="screen card" hidden aria-labelledby="h-confirm">
         <div class="card-body">
+          <div class="screen-badge" data-i18n="step_badge_confirm">Step 2 · Signal Verification</div>
           <h2 id="h-confirm" class="screen-title" tabindex="-1" data-i18n="confirm_title">Check what we understood</h2>
           <p class="hint" data-i18n="confirm_hint"></p>
           <form id="form-confirm" novalidate>
@@ -139,6 +176,13 @@
       <!-- 3. plan -->
       <section id="screen-plan" data-screen="plan" class="screen card" hidden aria-labelledby="h-plan">
         <div class="card-body">
+          <div class="plan-header-row">
+            <div class="screen-badge" data-i18n="step_badge_plan">Step 3 · Purchase Optimization</div>
+            <button type="button" class="btn-copy-plan" id="btn-copy-plan" aria-label="Copy plan summary">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="copy-plan-text" data-i18n="copy_plan">Copy Summary</span>
+            </button>
+          </div>
           <h2 id="h-plan" class="screen-title" tabindex="-1" data-i18n="plan_title">Your purchase plan</h2>
 
           <label class="store" id="store-box" hidden>
@@ -183,8 +227,15 @@
                 <span class="slider-label" data-i18n="slider_label">Change your budget</span>
                 <input id="budget-range" class="form-range" type="range" min="0" max="10000" step="100">
               </label>
-              <input id="budget-num" class="budget-num form-control" type="number" inputmode="decimal" min="1" step="any"
-                     aria-label="Budget">
+              <div class="budget-input-row">
+                <input id="budget-num" class="budget-num form-control" type="number" inputmode="decimal" min="1" step="any"
+                       aria-label="Budget">
+                <div class="budget-nudges">
+                  <button type="button" class="btn-nudge" data-nudge="-500" data-i18n="step_adjust_down">− 500</button>
+                  <button type="button" class="btn-nudge" data-nudge="500" data-i18n="step_adjust_up">+ 500</button>
+                  <button type="button" class="btn-nudge" data-nudge="1000" data-i18n="step_adjust_up2">+ 1,000</button>
+                </div>
+              </div>
               <p class="status" id="plan-status" aria-live="polite"></p>
             </div>
           </div>
@@ -192,7 +243,13 @@
           <div id="plan-flags"></div>
 
           <section class="block">
-            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span data-i18n="why_title">Why this plan</span></h3>
+            <h3 class="block-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </span>
+              <span data-i18n="why_title">Why this plan</span>
+              <span class="ai-rationale-tag" data-i18n="ai_rationale_badge">AI Decision Rationale</span>
+            </h3>
             <p id="explanation" class="explanation"></p>
           </section>
 
@@ -234,10 +291,13 @@
             </form>
           </section>
 
-          <section class="block">
-            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span data-i18n="explore_section_title">New products to try</span></h3>
-            <p class="hint" data-i18n="explore_section_hint"></p>
-            <button type="button" class="btn secondary full" id="btn-explore" data-i18n="explore_btn">Find new products to try</button>
+          <section class="block block-explore-promo">
+            <div class="explore-promo-card">
+              <div class="explore-promo-badge" data-i18n="step_badge_explore">Opportunities · Catalogue Discovery</div>
+              <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span data-i18n="explore_section_title">New products to try</span></h3>
+              <p class="hint" data-i18n="explore_section_hint"></p>
+              <button type="button" class="btn secondary full" id="btn-explore" data-i18n="explore_btn">Find new products to try</button>
+            </div>
           </section>
 
           <p class="timing muted small" id="timing"></p>
@@ -248,6 +308,7 @@
       <!-- 4. explore (Component D) -->
       <section id="screen-explore" data-screen="explore" class="screen card" hidden aria-labelledby="h-explore">
         <div class="card-body">
+          <div class="screen-badge" data-i18n="step_badge_explore">Opportunities · Catalogue Discovery</div>
           <h2 id="h-explore" class="screen-title" tabindex="-1" data-i18n="explore_title">New products to try</h2>
           <p class="hint" data-i18n="explore_hint"></p>
           <p class="flag" id="explore-sample" hidden data-i18n="explore_sample_note"></p>
