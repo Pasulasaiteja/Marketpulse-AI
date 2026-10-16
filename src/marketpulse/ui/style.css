@@ -378,9 +378,9 @@ main { padding-bottom: 64px; }
 }
 .btn-copy-plan {
   display: inline-flex; align-items: center; gap: 6px;
-  min-height: 36px; padding: 4px 12px; border-radius: 999px;
+  min-height: 44px; padding: 8px 14px; border-radius: 999px;
   background: var(--surface-2); border: 1.5px solid var(--rule-2);
-  color: var(--ink-2); font-size: .8rem; font-weight: 650;
+  color: var(--ink-2); font-size: .82rem; font-weight: 650;
   cursor: pointer; transition: all .18s ease;
 }
 .btn-copy-plan:hover {
@@ -417,9 +417,9 @@ main { padding-bottom: 64px; }
 .field-header .form-label { margin-bottom: 0; }
 .btn-example-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  min-height: 32px; padding: 2px 10px; border-radius: 999px;
+  min-height: 44px; padding: 6px 14px; border-radius: 999px;
   background: var(--surface-2); border: 1.5px solid var(--rule-2);
-  color: var(--primary); font-size: .8rem; font-weight: 650;
+  color: var(--primary); font-size: .84rem; font-weight: 650;
   cursor: pointer; transition: all .16s ease;
 }
 .btn-example-chip:hover {
@@ -521,10 +521,11 @@ select[data-control] {
   font-size: .76rem; font-weight: 650; color: var(--muted); margin-right: 2px;
 }
 .preset-chip {
-  min-height: 32px; padding: 3px 10px; border-radius: 999px;
+  min-height: 44px; padding: 6px 14px; border-radius: 999px;
   background: var(--surface-2); border: 1.5px solid var(--rule-2);
-  color: var(--ink-2); font-size: .8rem; font-weight: 650;
+  color: var(--ink-2); font-size: .84rem; font-weight: 650;
   font-variant-numeric: tabular-nums; cursor: pointer; transition: all .15s ease;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .preset-chip:hover {
   border-color: var(--primary); color: var(--primary); background: var(--primary-soft);
