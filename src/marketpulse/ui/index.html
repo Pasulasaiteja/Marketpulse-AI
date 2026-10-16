@@ -3,174 +3,235 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#0b5f57">
   <title>MarketPulse</title>
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top">
-    <h1 class="brand" data-i18n="app_title">MarketPulse</h1>
-    <label class="lang">
-      <span data-i18n="language">Language</span>
-      <select id="lang" aria-label="Language"></select>
-    </label>
+  <header class="hero">
+    <div class="container hero-inner">
+      <div class="hero-top">
+        <span class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 15.5 7 9l3 4 2.5-7.5L16 16l2-4 3 1.5"/>
+            </svg>
+          </span>
+          <span class="brand-name" data-i18n="app_title">MarketPulse</span>
+        </span>
+        <label class="lang">
+          <span class="lang-label" data-i18n="language">Language</span>
+          <select id="lang" class="form-select" aria-label="Language"></select>
+        </label>
+      </div>
+
+      <ol class="steps" id="steps" aria-label="Progress">
+        <li data-step="describe"><span class="dot" aria-hidden="true"></span><span data-i18n="step_describe">Describe</span></li>
+        <li data-step="confirm"><span class="dot" aria-hidden="true"></span><span data-i18n="step_confirm">Confirm</span></li>
+        <li data-step="plan"><span class="dot" aria-hidden="true"></span><span data-i18n="step_plan">Plan</span></li>
+      </ol>
+    </div>
   </header>
 
-  <ol class="steps" id="steps" aria-label="Progress">
-    <li data-step="describe"><span data-i18n="step_describe">Describe</span></li>
-    <li data-step="confirm"><span data-i18n="step_confirm">Confirm</span></li>
-    <li data-step="plan"><span data-i18n="step_plan">Plan</span></li>
-  </ol>
+  <div class="container app-body">
+    <div id="alerts" class="alerts" role="alert" aria-live="assertive"></div>
 
-  <div id="alerts" class="alerts" role="alert" aria-live="assertive"></div>
+    <main>
+      <!-- 1. describe -->
+      <section id="screen-describe" data-screen="describe" class="screen card" aria-labelledby="h-describe">
+        <div class="card-body">
+          <h2 id="h-describe" class="screen-title" tabindex="-1" data-i18n="describe_title">Tell us about your shop</h2>
+          <p class="hint" data-i18n="describe_hint"></p>
 
-  <main>
-    <!-- 1. describe -->
-    <section id="screen-describe" data-screen="describe" aria-labelledby="h-describe">
-      <h2 id="h-describe" tabindex="-1" data-i18n="describe_title">Tell us about your shop</h2>
-      <p class="hint" data-i18n="describe_hint"></p>
+          <form id="form-describe" novalidate>
+            <div class="field">
+              <label class="form-label" for="description"><span data-i18n="description_label">Shop description</span></label>
+              <textarea id="description" class="form-control" rows="4" data-i18n-ph="description_ph"></textarea>
+              <button type="button" class="link" id="btn-example" data-i18n="try_example">Use an example</button>
+            </div>
 
-      <form id="form-describe" novalidate>
-        <div class="field">
-          <label for="description" data-i18n="description_label">Shop description</label>
-          <textarea id="description" rows="4" data-i18n-ph="description_ph"></textarea>
-          <button type="button" class="link" id="btn-example" data-i18n="try_example">Use an example</button>
+            <fieldset class="field">
+              <legend class="form-label"><span data-i18n="data_title">Your sales data</span></legend>
+              <div class="file-grid">
+                <label class="file">
+                  <span class="file-label" data-i18n="products_csv">Products file (CSV)</span>
+                  <input type="file" class="form-control" id="file-products" accept=".csv,text/csv">
+                </label>
+                <label class="file">
+                  <span class="file-label" data-i18n="sales_csv">Sales file (CSV)</span>
+                  <input type="file" class="form-control" id="file-sales" accept=".csv,text/csv">
+                </label>
+              </div>
+              <div class="quick">
+                <button type="button" class="link" id="btn-demo" data-i18n="use_demo">Use sample shop data</button>
+                <button type="button" class="link" id="btn-demo-chain" data-i18n="use_demo_chain">Use sample data for 3 stores</button>
+              </div>
+              <p class="status" id="data-status" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="row-2">
+              <div class="field grow">
+                <label class="form-label" for="budget"><span data-i18n="budget_label">Budget</span></label>
+                <input id="budget" class="form-control" type="number" inputmode="decimal" min="1" step="any" value="5000">
+              </div>
+              <div class="field">
+                <label class="form-label" for="horizon"><span data-i18n="horizon_label">Plan for</span></label>
+                <select id="horizon" class="form-select">
+                  <option value="7">7</option>
+                  <option value="14" selected>14</option>
+                  <option value="30">30</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn primary full" id="btn-extract" data-i18n="read_details">Read my shop details</button>
+          </form>
         </div>
+      </section>
 
-        <fieldset class="field">
-          <legend data-i18n="data_title">Your sales data</legend>
-          <label class="file">
-            <span data-i18n="products_csv">Products file (CSV)</span>
-            <input type="file" id="file-products" accept=".csv,text/csv">
+      <!-- 2. confirm -->
+      <section id="screen-confirm" data-screen="confirm" class="screen card" hidden aria-labelledby="h-confirm">
+        <div class="card-body">
+          <h2 id="h-confirm" class="screen-title" tabindex="-1" data-i18n="confirm_title">Check what we understood</h2>
+          <p class="hint" data-i18n="confirm_hint"></p>
+          <form id="form-confirm" novalidate>
+            <div id="confirm-fields"></div>
+            <div class="actions">
+              <button type="button" class="btn secondary" id="btn-back" data-i18n="back">Back</button>
+              <button type="submit" class="btn primary" id="btn-confirm" data-i18n="confirm_btn">Confirm and make plan</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- 3. plan -->
+      <section id="screen-plan" data-screen="plan" class="screen card" hidden aria-labelledby="h-plan">
+        <div class="card-body">
+          <h2 id="h-plan" class="screen-title" tabindex="-1" data-i18n="plan_title">Your purchase plan</h2>
+
+          <label class="store" id="store-box" hidden>
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <span data-i18n="store_label">Store</span>
+            <select id="store-select" class="form-select"></select>
           </label>
-          <label class="file">
-            <span data-i18n="sales_csv">Sales file (CSV)</span>
-            <input type="file" id="file-sales" accept=".csv,text/csv">
-          </label>
-          <button type="button" class="link" id="btn-demo" data-i18n="use_demo">Use sample shop data</button>
-          <button type="button" class="link" id="btn-demo-chain" data-i18n="use_demo_chain">Use sample data for 3 stores</button>
-          <p class="status" id="data-status" aria-live="polite"></p>
-        </fieldset>
 
-        <div class="row">
-          <div class="field grow">
-            <label for="budget" data-i18n="budget_label">Budget</label>
-            <input id="budget" type="number" inputmode="decimal" min="1" step="any" value="5000">
+          <div id="budget-box">
+            <div class="kpis">
+              <div class="kpi kpi-spend">
+                <span class="kpi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </span>
+                <span class="kpi-label" data-i18n="spend_label">Planned spend</span>
+                <span class="kpi-value spend"><span id="spend-val" class="num"></span> <span id="cur-a" class="cur"></span></span>
+              </div>
+              <div class="kpi kpi-budget">
+                <span class="kpi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                </span>
+                <span class="kpi-label" data-i18n="of_budget">of budget</span>
+                <span class="kpi-value budget-val"><span id="budget-val" class="num"></span> <span id="cur-b" class="cur"></span></span>
+              </div>
+              <div class="kpi kpi-profit profit">
+                <span class="kpi-ico" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                </span>
+                <span class="kpi-label" data-i18n="profit_label">Expected profit</span>
+                <span class="kpi-value profit-val"><span id="profit-val" class="num"></span> <span id="cur-c" class="cur"></span></span>
+                <span class="kpi-note" data-i18n="profit_note"></span>
+              </div>
+            </div>
+
+            <div class="tape-block">
+              <div class="tape" id="tape" role="img" aria-label="">
+                <div class="tape-fill" id="tape-fill"></div>
+              </div>
+              <label class="slider" for="budget-range">
+                <span class="slider-label" data-i18n="slider_label">Change your budget</span>
+                <input id="budget-range" class="form-range" type="range" min="0" max="10000" step="100">
+              </label>
+              <input id="budget-num" class="budget-num form-control" type="number" inputmode="decimal" min="1" step="any"
+                     aria-label="Budget">
+              <p class="status" id="plan-status" aria-live="polite"></p>
+            </div>
           </div>
-          <div class="field">
-            <label for="horizon" data-i18n="horizon_label">Plan for</label>
-            <select id="horizon">
-              <option value="7">7</option>
-              <option value="14" selected>14</option>
-              <option value="30">30</option>
-            </select>
-          </div>
+
+          <div id="plan-flags"></div>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span data-i18n="why_title">Why this plan</span></h3>
+            <p id="explanation" class="explanation"></p>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span><span data-i18n="buy_title">Buy now</span></h3>
+            <ul id="buy-list" class="lines"></ul>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title" id="skip-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span><span data-i18n="skip_title">Not buying now</span></h3>
+            <ul id="skip-list" class="lines skip"></ul>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span data-i18n="risks_title">What could go wrong</span></h3>
+            <ul id="risk-list" class="risks"></ul>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span><span data-i18n="sens_title">If your budget were different</span></h3>
+            <table class="sens" id="sens-table">
+              <thead><tr>
+                <th scope="col" data-i18n="sens_budget">Budget</th>
+                <th scope="col" data-i18n="sens_spend">Spend</th>
+                <th scope="col" data-i18n="sens_profit">Profit</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><span data-i18n="chat_title">Ask why</span></h3>
+            <ul id="chat-log" class="chat" aria-live="polite"></ul>
+            <div class="suggest" id="suggest"></div>
+            <form id="form-chat" class="chat-form" novalidate>
+              <input id="chat-input" class="form-control" type="text" autocomplete="off" aria-label="Question"
+                     data-i18n-ph="chat_ph">
+              <button type="submit" class="btn primary" id="btn-ask" data-i18n="ask_btn">Ask</button>
+            </form>
+          </section>
+
+          <section class="block">
+            <h3 class="block-title"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span><span data-i18n="explore_section_title">New products to try</span></h3>
+            <p class="hint" data-i18n="explore_section_hint"></p>
+            <button type="button" class="btn secondary full" id="btn-explore" data-i18n="explore_btn">Find new products to try</button>
+          </section>
+
+          <p class="timing muted small" id="timing"></p>
+          <button type="button" class="btn ghost full" id="btn-edit" data-i18n="edit_description">Edit shop description</button>
         </div>
+      </section>
 
-        <button type="submit" class="primary" id="btn-extract" data-i18n="read_details">Read my shop details</button>
-      </form>
-    </section>
-
-    <!-- 2. confirm -->
-    <section id="screen-confirm" data-screen="confirm" hidden aria-labelledby="h-confirm">
-      <h2 id="h-confirm" tabindex="-1" data-i18n="confirm_title">Check what we understood</h2>
-      <p class="hint" data-i18n="confirm_hint"></p>
-      <form id="form-confirm" novalidate>
-        <div id="confirm-fields"></div>
-        <div class="actions">
-          <button type="button" class="secondary" id="btn-back" data-i18n="back">Back</button>
-          <button type="submit" class="primary" id="btn-confirm" data-i18n="confirm_btn">Confirm and make plan</button>
+      <!-- 4. explore (Component D) -->
+      <section id="screen-explore" data-screen="explore" class="screen card" hidden aria-labelledby="h-explore">
+        <div class="card-body">
+          <h2 id="h-explore" class="screen-title" tabindex="-1" data-i18n="explore_title">New products to try</h2>
+          <p class="hint" data-i18n="explore_hint"></p>
+          <p class="flag" id="explore-sample" hidden data-i18n="explore_sample_note"></p>
+          <div id="explore-flags"></div>
+          <p class="status" id="explore-status" aria-live="polite"></p>
+          <div id="explore-body"></div>
+          <button type="button" class="btn ghost full" id="btn-explore-back" data-i18n="back_to_plan">Back to plan</button>
         </div>
-      </form>
-    </section>
+      </section>
+    </main>
+  </div>
 
-    <!-- 3. plan -->
-    <section id="screen-plan" data-screen="plan" hidden aria-labelledby="h-plan">
-      <h2 id="h-plan" tabindex="-1" data-i18n="plan_title">Your purchase plan</h2>
-
-      <label class="store" id="store-box" hidden>
-        <span data-i18n="store_label">Store</span>
-        <select id="store-select"></select>
-      </label>
-
-      <div class="budget" id="budget-box">
-        <div class="tape-labels">
-          <span class="muted" data-i18n="spend_label">Planned spend</span>
-          <span class="spend"><span id="spend-val" class="num"></span> <span id="cur-a" class="cur"></span></span>
-        </div>
-        <div class="tape" id="tape" role="img" aria-label="">
-          <div class="tape-fill" id="tape-fill"></div>
-        </div>
-        <div class="tape-labels">
-          <span class="muted" data-i18n="of_budget">of budget</span>
-          <span><span id="budget-val" class="num"></span> <span id="cur-b" class="cur"></span></span>
-        </div>
-        <label class="slider" for="budget-range">
-          <span data-i18n="slider_label">Change your budget</span>
-          <input id="budget-range" type="range" min="0" max="10000" step="100">
-        </label>
-        <input id="budget-num" class="budget-num" type="number" inputmode="decimal" min="1" step="any"
-               aria-label="Budget">
-        <p class="status" id="plan-status" aria-live="polite"></p>
-      </div>
-
-      <div class="profit">
-        <span class="muted" data-i18n="profit_label">Expected profit</span>
-        <span class="profit-val"><span id="profit-val" class="num"></span> <span id="cur-c" class="cur"></span></span>
-        <span class="muted small" data-i18n="profit_note"></span>
-      </div>
-
-      <div id="plan-flags"></div>
-
-      <h3 data-i18n="why_title">Why this plan</h3>
-      <p id="explanation" class="explanation"></p>
-
-      <h3 data-i18n="buy_title">Buy now</h3>
-      <ul id="buy-list" class="lines"></ul>
-
-      <h3 id="skip-title" data-i18n="skip_title">Not buying now</h3>
-      <ul id="skip-list" class="lines skip"></ul>
-
-      <h3 data-i18n="risks_title">What could go wrong</h3>
-      <ul id="risk-list" class="risks"></ul>
-
-      <h3 data-i18n="sens_title">If your budget were different</h3>
-      <table class="sens" id="sens-table">
-        <thead><tr>
-          <th scope="col" data-i18n="sens_budget">Budget</th>
-          <th scope="col" data-i18n="sens_spend">Spend</th>
-          <th scope="col" data-i18n="sens_profit">Profit</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-
-      <h3 data-i18n="chat_title">Ask why</h3>
-      <ul id="chat-log" class="chat" aria-live="polite"></ul>
-      <div class="suggest" id="suggest"></div>
-      <form id="form-chat" class="chat-form" novalidate>
-        <input id="chat-input" type="text" autocomplete="off" aria-label="Question" data-i18n-ph="chat_ph">
-        <button type="submit" class="primary" id="btn-ask" data-i18n="ask_btn">Ask</button>
-      </form>
-
-      <h3 data-i18n="explore_section_title">New products to try</h3>
-      <p class="hint" data-i18n="explore_section_hint"></p>
-      <button type="button" class="secondary full" id="btn-explore" data-i18n="explore_btn">Find new products to try</button>
-
-      <p class="timing muted small" id="timing"></p>
-      <button type="button" class="secondary full" id="btn-edit" data-i18n="edit_description">Edit shop description</button>
-    </section>
-
-    <!-- 4. explore (Component D) -->
-    <section id="screen-explore" data-screen="explore" hidden aria-labelledby="h-explore">
-      <h2 id="h-explore" tabindex="-1" data-i18n="explore_title">New products to try</h2>
-      <p class="hint" data-i18n="explore_hint"></p>
-      <p class="flag" id="explore-sample" hidden data-i18n="explore_sample_note"></p>
-      <div id="explore-flags"></div>
-      <p class="status" id="explore-status" aria-live="polite"></p>
-      <div id="explore-body"></div>
-      <button type="button" class="secondary full" id="btn-explore-back" data-i18n="back_to_plan">Back to plan</button>
-    </section>
-  </main>
-
+  <script src="vendor/bootstrap.bundle.min.js"></script>
   <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
