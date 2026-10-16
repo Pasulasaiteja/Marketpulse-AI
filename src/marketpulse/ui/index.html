@@ -3,14 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#0b5f57">
   <title>MarketPulse</title>
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="hero">
+    <svg class="pulse" aria-hidden="true" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
+      <path class="pulse-base" vector-effect="non-scaling-stroke"
+            d="M0 100 H170 l26 -62 l30 124 l26 -96 l22 34 H430 l30 -54 l30 108 l26 -84 l22 30 H740 l30 -70 l30 132 l26 -104 l24 42 H1200"/>
+      <path class="pulse-live" vector-effect="non-scaling-stroke"
+            d="M0 100 H170 l26 -62 l30 124 l26 -96 l22 34 H430 l30 -54 l30 108 l26 -84 l22 30 H740 l30 -70 l30 132 l26 -104 l24 42 H1200"/>
+    </svg>
+
     <div class="container hero-inner">
       <div class="hero-top">
         <span class="brand">
@@ -22,10 +28,23 @@
           </span>
           <span class="brand-name" data-i18n="app_title">MarketPulse</span>
         </span>
+
         <label class="lang">
           <span class="lang-label" data-i18n="language">Language</span>
           <select id="lang" class="form-select" aria-label="Language"></select>
         </label>
+
+        <button id="btn-theme" class="icon-btn" type="button" aria-label="Switch theme" title="Switch theme">
+          <svg class="i-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="i-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+        </button>
       </div>
 
       <ol class="steps" id="steps" aria-label="Progress">
@@ -57,12 +76,22 @@
               <legend class="form-label"><span data-i18n="data_title">Your sales data</span></legend>
               <div class="file-grid">
                 <label class="file">
-                  <span class="file-label" data-i18n="products_csv">Products file (CSV)</span>
-                  <input type="file" class="form-control" id="file-products" accept=".csv,text/csv">
+                  <span class="file-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                  </span>
+                  <span class="file-body">
+                    <span class="file-label" data-i18n="products_csv">Products file (CSV)</span>
+                    <input type="file" class="form-control" id="file-products" accept=".csv,text/csv">
+                  </span>
                 </label>
                 <label class="file">
-                  <span class="file-label" data-i18n="sales_csv">Sales file (CSV)</span>
-                  <input type="file" class="form-control" id="file-sales" accept=".csv,text/csv">
+                  <span class="file-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                  </span>
+                  <span class="file-body">
+                    <span class="file-label" data-i18n="sales_csv">Sales file (CSV)</span>
+                    <input type="file" class="form-control" id="file-sales" accept=".csv,text/csv">
+                  </span>
                 </label>
               </div>
               <div class="quick">
@@ -120,7 +149,7 @@
             <select id="store-select" class="form-select"></select>
           </label>
 
-          <div id="budget-box">
+          <div id="budget-box" class="panel">
             <div class="kpis">
               <div class="kpi kpi-spend">
                 <span class="kpi-ico" aria-hidden="true">
